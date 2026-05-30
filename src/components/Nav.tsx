@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ZoneSelect from "./ZoneSelect";
+import { logout } from "@/app/actions/auth";
 
 const LINKS = [
   { href: "/", label: "Ce mois-ci", emoji: "📅" },
@@ -14,6 +15,9 @@ const LINKS = [
 
 export default function Nav() {
   const pathname = usePathname();
+
+  // Pas de barre de navigation sur l'écran de connexion.
+  if (pathname === "/login") return null;
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -41,7 +45,18 @@ export default function Nav() {
             </Link>
           ))}
         </nav>
-        <ZoneSelect />
+        <div className="flex items-center gap-2">
+          <ZoneSelect />
+          <form action={logout}>
+            <button
+              type="submit"
+              title="Se déconnecter"
+              className="rounded-full px-2.5 py-1.5 text-sm text-emerald-700 transition hover:bg-emerald-50"
+            >
+              ⎋
+            </button>
+          </form>
+        </div>
       </div>
     </header>
   );

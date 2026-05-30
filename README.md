@@ -18,16 +18,36 @@ rien au jardinage.
   détection des voisinages déconseillés (compagnonnage).
 - **Zone climatique** — tout le calendrier se décale selon la région
   (Nord / France tempérée / Sud).
+- **Accès protégé** — mot de passe unique du foyer (session par cookie).
+- **Notifications** — rappels des tâches du mois envoyés sur **Discord**,
+  **Home Assistant** et/ou **Web Push** (PWA), déclenchés par un cron.
+- **PWA installable** — installable sur mobile/desktop, fonctionnement
+  hors-ligne basique via service worker.
 
-Les données personnelles (jardin, plan) sont stockées dans le `localStorage`
-du navigateur : **aucune base de données ni backend** n'est nécessaire.
+Les données du foyer (jardin, plan) sont enregistrées côté serveur dans une
+base **SQLite** (`node:sqlite`, sans dépendance native).
 
 ## Stack technique
 
-- [Next.js](https://nextjs.org/) 16 (App Router) + React 19
-- TypeScript
-- Tailwind CSS v4
-- Node.js 24
+- [Next.js](https://nextjs.org/) 16 (App Router, « Proxy ») + React 19
+- TypeScript · Tailwind CSS v4 · Node.js 24
+- Persistance : **SQLite** via le module intégré `node:sqlite`
+- Notifications Web Push : `web-push` (VAPID)
+
+## Configuration (variables d'environnement)
+
+Copier [`.env.example`](.env.example) en `.env` (dev) ou `.env.production`
+(serveur) et renseigner au minimum `HOUSEHOLD_PASSWORD`. Principales clés :
+
+| Variable | Rôle |
+| --- | --- |
+| `HOUSEHOLD_PASSWORD` | Mot de passe du foyer. **Vide ⇒ auth désactivée** (accès libre LAN). |
+| `DATABASE_PATH` | Chemin du fichier SQLite (défaut `./data/potager.db`). |
+| `CRON_SECRET` | Secret exigé pour déclencher `/api/notify/run`. |
+| `NOTIFY_ZONE_OFFSET` | Décalage de zone du digest (-1 sud, 0 tempéré, 1 nord). |
+| `DISCORD_WEBHOOK_URL` | Webhook Discord (optionnel). |
+| `HA_WEBHOOK_URL` *ou* `HA_BASE_URL`+`HA_TOKEN`+`HA_NOTIFY_SERVICE` | Home Assistant (optionnel). |
+| `NEXT_PUBLIC_VAPID_PUBLIC_KEY` / `VAPID_PRIVATE_KEY` / `VAPID_SUBJECT` | Web Push (optionnel). Générer : `npx web-push generate-vapid-keys`. |
 
 ## Développement local
 
@@ -48,9 +68,10 @@ npm run lint
 
 ## Déploiement — Proxmox / conteneur LXC
 
-> Procédure de référence. L'app est un serveur Next.js sans base de données ;
-> il suffit d'un conteneur Linux avec Node.js 24, du build, et d'un service
-> qui maintient le process en vie derrière un reverse proxy.
+> Procédure de référence. L'app est un serveur Next.js avec une base SQLite
+> locale (fichier) : il suffit d'un conteneur Linux avec Node.js 24, du build,
+> d'un fichier `.env.production`, et d'un service qui maintient le process en
+> vie derrière un reverse proxy.
 
 ### 1. Créer le conteneur LXC (sur l'hôte Proxmox)
 
@@ -81,12 +102,22 @@ su - potager
 git clone https://github.com/Flalal/potager.git
 cd potager
 npm ci
+
+# Configurer l'environnement (au minimum le mot de passe du foyer)
+cp .env.example .env.production
+nano .env.production        # HOUSEHOLD_PASSWORD, CRON_SECRET, notifs…
+
 npm run build
 ```
 
 > Le dépôt est **privé** : pour `git clone`, utiliser un Personal Access Token
 > (`https://<TOKEN>@github.com/Flalal/potager.git`) ou une clé de déploiement
 > SSH ajoutée au dépôt.
+
+> La base SQLite est créée automatiquement au premier lancement sous
+> `./data/potager.db`. Pour la placer sur un volume persistant, définir
+> `DATABASE_PATH=/var/lib/potager/potager.db` (créer le dossier, propriétaire
+> `potager`).
 
 ### 4. Lancer en service (systemd)
 
@@ -103,6 +134,9 @@ User=potager
 WorkingDirectory=/home/potager/potager
 Environment=NODE_ENV=production
 Environment=PORT=3000
+# node:sqlite est « expérimental » et émet un warning au démarrage : on le tait
+Environment=NODE_OPTIONS=--no-warnings
+EnvironmentFile=/home/potager/potager/.env.production
 ExecStart=/usr/bin/npm run start
 Restart=on-failure
 
@@ -132,7 +166,21 @@ potager.mondomaine.fr {
 
 Caddy gère automatiquement le certificat TLS Let's Encrypt.
 
-### 6. Mises à jour
+### 6. Notifications (cron)
+
+Les rappels du mois sont envoyés quand on appelle `/api/notify/run` (protégé
+par `CRON_SECRET`). Planifier un appel, par ex. tous les lundis à 8 h, via la
+crontab du conteneur (`crontab -e`) :
+
+```cron
+0 8 * * 1 curl -fsS -X POST "https://potager.mondomaine.fr/api/notify/run?secret=VOTRE_CRON_SECRET" >/dev/null
+```
+
+Les canaux actifs dépendent des variables définies (`DISCORD_WEBHOOK_URL`,
+`HA_*`, clés `VAPID`). Pour le **Web Push**, chaque appareil doit d'abord
+cliquer « 🔔 Activer les rappels » dans *Mon jardin*.
+
+### 7. Mises à jour
 
 ```bash
 su - potager

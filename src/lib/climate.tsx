@@ -45,9 +45,12 @@ export function ClimateProvider({ children }: { children: React.ReactNode }) {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
+    // Hydratation depuis le localStorage au montage (pattern store externe).
     const saved = window.localStorage.getItem(STORAGE_KEY) as Zone | null;
+    /* eslint-disable react-hooks/set-state-in-effect */
     if (saved && ZONES.includes(saved)) setZoneState(saved);
     setReady(true);
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, []);
 
   const setZone = useCallback((z: Zone) => {
