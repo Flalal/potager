@@ -1,5 +1,11 @@
 import { describe, it, expect } from "vitest";
-import { wateringAdvice, summarize, openMeteoUrl } from "./weather";
+import {
+  wateringAdvice,
+  summarize,
+  openMeteoUrl,
+  geocodeUrl,
+  firstGeocode,
+} from "./weather";
 
 describe("wateringAdvice", () => {
   it("inutile d'arroser si pluie abondante", () => {
@@ -56,5 +62,39 @@ describe("openMeteoUrl", () => {
     expect(url).toContain("api.open-meteo.com");
     expect(url).toContain("latitude=48.857");
     expect(url).toContain("daily=precipitation_sum");
+  });
+});
+
+describe("geocodeUrl", () => {
+  it("encode le nom de la ville", () => {
+    const url = geocodeUrl("Saint-Étienne");
+    expect(url).toContain("geocoding-api.open-meteo.com");
+    expect(url).toContain("name=Saint-%C3%89tienne");
+  });
+});
+
+describe("firstGeocode", () => {
+  it("extrait coordonnées et libellé", () => {
+    const res = firstGeocode({
+      results: [
+        {
+          name: "Lyon",
+          latitude: 45.75,
+          longitude: 4.85,
+          admin1: "Auvergne-Rhône-Alpes",
+          country_code: "FR",
+        },
+      ],
+    });
+    expect(res).toEqual({
+      lat: 45.75,
+      lon: 4.85,
+      label: "Lyon, Auvergne-Rhône-Alpes, FR",
+    });
+  });
+
+  it("renvoie null si aucun résultat", () => {
+    expect(firstGeocode({})).toBeNull();
+    expect(firstGeocode({ results: [] })).toBeNull();
   });
 });

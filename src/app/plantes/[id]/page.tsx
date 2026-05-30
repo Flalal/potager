@@ -10,6 +10,7 @@ import {
 import AddToGarden from "@/components/AddToGarden";
 import PlantCalendar from "@/components/PlantCalendar";
 import PlantAvatar from "@/components/PlantAvatar";
+import BuyLinksSection from "@/components/BuyLinksSection";
 
 export function generateStaticParams() {
   return PLANTS.map((p) => ({ id: p.id }));
@@ -72,6 +73,9 @@ export default async function PlantePage(props: PageProps<"/plantes/[id]">) {
         <h2 className="mb-1 font-bold text-amber-900 dark:text-amber-200">💡 Conseil débutant</h2>
         <p className="text-sm text-amber-900/90 dark:text-amber-200/90">{plant.conseils}</p>
       </section>
+
+      {/* Où acheter */}
+      <BuyLinksSection plant={plant} />
 
       {/* Soins au fil de la saison */}
       {plant.soins.length > 0 && (

@@ -65,6 +65,42 @@ export function openMeteoUrl(lat: number, lon: number): string {
   return `https://api.open-meteo.com/v1/forecast?${p.toString()}`;
 }
 
+export interface GeoPlace {
+  lat: number;
+  lon: number;
+  label: string;
+}
+
+/** URL de géocodage Open-Meteo (ville → coordonnées), gratuit et sans clé. */
+export function geocodeUrl(name: string): string {
+  const p = new URLSearchParams({
+    name,
+    count: "1",
+    language: "fr",
+    format: "json",
+  });
+  return `https://geocoding-api.open-meteo.com/v1/search?${p.toString()}`;
+}
+
+interface GeocodeResponse {
+  results?: Array<{
+    name?: string;
+    latitude?: number;
+    longitude?: number;
+    admin1?: string;
+    country_code?: string;
+    postcodes?: string[];
+  }>;
+}
+
+/** Première correspondance de géocodage, ou null. */
+export function firstGeocode(data: GeocodeResponse): GeoPlace | null {
+  const r = data.results?.[0];
+  if (!r || r.latitude === undefined || r.longitude === undefined) return null;
+  const label = [r.name, r.admin1, r.country_code].filter(Boolean).join(", ");
+  return { lat: r.latitude, lon: r.longitude, label };
+}
+
 interface OpenMeteoDaily {
   daily?: {
     precipitation_sum?: number[];
