@@ -45,13 +45,21 @@ rotation (famille), compagnonnage, un mini-calendrier, la **quantité conseillé
 pour trouver le moins cher). Bouton **Ajouter à mon jardin** pour suivre la
 plante.
 
+## Mes graines
+
+Sur la page **Mes graines**, cochez les plantes dont vous avez les graines (ou
+les plants). C'est mémorisé côté serveur. Le **plan du potager** filtre alors sa
+palette sur ces graines par défaut (onglet « 🌰 Mes graines »).
+
 ## Plan du potager
 
 Dessinez vos **carrés** (lignes × colonnes), puis placez vos plantes :
 
 1. créez un carré, **ou partez d'un modèle tout fait** (Carré du débutant,
    Tomates & basilic, Carré d'aromates, Carré d'automne) ;
-2. dans la **palette**, choisissez une plante (ou la **gomme**) ;
+2. dans la **palette**, choisissez une plante (ou la **gomme**) — la palette
+   propose par défaut **vos graines** (voir *Mes graines*), bascule possible vers
+   Tout / Légume / Fruit / Aromate ;
 3. cliquez les cases pour les remplir.
 
 L'outil vous aide :

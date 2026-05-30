@@ -1,10 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import { usePlots, Plot } from "@/lib/plots";
 import { PLANTS, getPlantById } from "@/lib/plants";
 import { Category, CATEGORY_LABELS } from "@/lib/types";
 import { areIncompatible } from "@/lib/calendar";
+import { useSeeds } from "@/lib/seeds";
 import {
   rotationConflicts,
   suggestionsForPlot,
@@ -13,9 +15,14 @@ import {
 import PlantAvatar from "./PlantAvatar";
 
 type Brush = { type: "plant"; plantId: string } | { type: "eraser" } | null;
+type PaletteFilter = Category | "tous" | "mes";
 
 const CATEGORIES: (Category | "tous")[] = ["tous", "legume", "fruit", "aromate"];
-const CAT_LABEL: Record<string, string> = { tous: "Tout", ...CATEGORY_LABELS };
+const CAT_LABEL: Record<string, string> = {
+  tous: "Tout",
+  mes: "🌰 Mes graines",
+  ...CATEGORY_LABELS,
+};
 
 function conflictCells(plot: Plot): Set<number> {
   const conflicts = new Set<number>();
@@ -57,9 +64,19 @@ export default function PotagerPlanner() {
     resizePlot,
     setYear,
   } = usePlots();
+  const { seeds, ready: seedsReady } = useSeeds();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [brush, setBrush] = useState<Brush>(null);
-  const [catFilter, setCatFilter] = useState<Category | "tous">("tous");
+  const [catFilter, setCatFilter] = useState<PaletteFilter>("tous");
+
+  // Par défaut, si l'inventaire de graines existe, on filtre dessus.
+  const didInitFilter = useRef(false);
+  useEffect(() => {
+    if (!didInitFilter.current && seedsReady && seeds.length > 0) {
+      didInitFilter.current = true;
+      setCatFilter("mes");
+    }
+  }, [seedsReady, seeds.length]);
 
   // formulaire de création
   const [newNom, setNewNom] = useState("");
@@ -84,13 +101,11 @@ export default function PotagerPlanner() {
     [selected]
   );
 
-  const palette = useMemo(
-    () =>
-      catFilter === "tous"
-        ? PLANTS
-        : PLANTS.filter((p) => p.category === catFilter),
-    [catFilter]
-  );
+  const palette = useMemo(() => {
+    if (catFilter === "mes") return PLANTS.filter((p) => seeds.includes(p.id));
+    if (catFilter === "tous") return PLANTS;
+    return PLANTS.filter((p) => p.category === catFilter);
+  }, [catFilter, seeds]);
 
   if (!ready) {
     return <p className="text-sm text-emerald-700/60 dark:text-emerald-300/60">Chargement…</p>;
@@ -275,7 +290,7 @@ export default function PotagerPlanner() {
             </div>
 
             <div className="mb-3 flex flex-wrap gap-1.5">
-              {CATEGORIES.map((cat) => (
+              {(["mes", ...CATEGORIES] as PaletteFilter[]).map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setCatFilter(cat)}
@@ -286,12 +301,24 @@ export default function PotagerPlanner() {
                   }`}
                 >
                   {CAT_LABEL[cat]}
+                  {cat === "mes" && ` (${seeds.length})`}
                 </button>
               ))}
             </div>
 
-            <div className="grid max-h-56 grid-cols-3 gap-2 overflow-y-auto sm:grid-cols-5 md:grid-cols-6">
-              {palette.map((plant) => {
+            {catFilter === "mes" && palette.length === 0 ? (
+              <p className="rounded-lg border border-dashed border-emerald-200 bg-emerald-50/50 p-4 text-sm text-emerald-800 dark:border-zinc-700 dark:bg-zinc-800/40 dark:text-emerald-100">
+                Vous n&apos;avez pas encore défini vos graines.{" "}
+                <Link
+                  href="/graines"
+                  className="font-semibold text-emerald-700 underline-offset-2 hover:underline dark:text-emerald-300"
+                >
+                  Définir mes graines →
+                </Link>
+              </p>
+            ) : (
+              <div className="grid max-h-56 grid-cols-3 gap-2 overflow-y-auto sm:grid-cols-5 md:grid-cols-6">
+                {palette.map((plant) => {
                 const active =
                   brush?.type === "plant" && brush.plantId === plant.id;
                 return (
@@ -314,8 +341,9 @@ export default function PotagerPlanner() {
                     </span>
                   </button>
                 );
-              })}
-            </div>
+                })}
+              </div>
+            )}
           </div>
         </>
       )}

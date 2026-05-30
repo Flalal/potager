@@ -10,6 +10,7 @@ const LINKS = [
   { href: "/", label: "Ce mois-ci", emoji: "📅" },
   { href: "/calendrier", label: "Calendrier", emoji: "🗓️" },
   { href: "/plantes", label: "Plantes", emoji: "🌱" },
+  { href: "/graines", label: "Mes graines", emoji: "🌰" },
   { href: "/potager", label: "Plan", emoji: "🟫" },
   { href: "/mon-jardin", label: "Mon jardin", emoji: "🪴" },
   { href: "/journal", label: "Journal", emoji: "📖" },

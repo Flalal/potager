@@ -39,6 +39,7 @@ src/
     mon-jardin/           Plantations + récolte prévue + tâches + météo
     journal/              Journal de jardin
     courses/              Liste de courses du mois
+    graines/              Inventaire « Mes graines »
     login/                Écran de connexion
     actions/auth.ts       Server Actions login / logout (+ anti-brute-force)
     api/                  Route Handlers (garden, plots, journal, tasks, push, notify)
@@ -58,7 +59,7 @@ src/
     session.ts            Sessions (cookie + DB)
     login-throttle.ts     Anti-brute-force (logique pure)
     *-store.ts            Accès DB côté serveur (garden, plots, journal, tasks, push…)
-    garden.ts/plots.ts/journal.ts/tasks.ts   Hooks client (cache optimiste + fetch)
+    garden.ts/plots.ts/journal.ts/tasks.ts/seeds.ts   Hooks client (cache optimiste + fetch)
   proxy.ts                Garde des routes (ex-middleware)
 public/
   sw.js                   Service worker (push + cache hors-ligne)
@@ -86,6 +87,7 @@ Créé automatiquement au démarrage (`CREATE TABLE IF NOT EXISTS`, voir `db.ts`
 | `plots` | parcelles du plan ; `cells` (année courante) + `layouts` (JSON par année) + `year` |
 | `journal_entries` | journal (récolte/semis/observation…) |
 | `task_done` | tâches cochées (clé `uid:année-mois:libellé`) |
+| `seeds` | inventaire des graines possédées (ids de plantes) |
 | `push_subscriptions` | abonnements Web Push |
 | `login_attempts` | compteur anti-brute-force par IP |
 

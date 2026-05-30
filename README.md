@@ -18,10 +18,13 @@ rien au jardinage.
   d'arrosage selon la météo locale** (Open-Meteo, par géoloc ou par ville).
 - **Journal de jardin** — récoltes, semis, observations et traitements datés,
   avec quantités.
+- **Mes graines** — inventaire des graines/plants que vous possédez ; le plan
+  du potager peut alors ne proposer que celles-ci.
 - **Plan du potager** — dessin des carrés et placement des plantes, avec :
-  détection des **voisinages déconseillés**, **rotation des cultures** (plan par
-  année + alerte « même famille ici récemment »), **modèles tout faits**,
-  **suggestions de bonnes voisines**, **distances de plantation**, impression.
+  palette **filtrable sur vos graines**, détection des **voisinages
+  déconseillés**, **rotation des cultures** (plan par année + alerte « même
+  famille ici récemment »), **modèles tout faits**, **suggestions de bonnes
+  voisines**, **distances de plantation**, impression.
 - **Liste de courses du mois** — graines/plants à acheter ce mois-ci, avec
   quantités (par nombre de personnes) et liens pour comparer les prix.
 - **Zone climatique** — tout le calendrier se décale selon la région

@@ -73,6 +73,11 @@ CREATE TABLE IF NOT EXISTS task_done (
   key         TEXT PRIMARY KEY,
   created_at  INTEGER NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS seeds (
+  plant_id    TEXT PRIMARY KEY,
+  created_at  INTEGER NOT NULL
+);
 `;
 
 /**
