@@ -10,6 +10,7 @@ import {
 } from "@/lib/calendar";
 import { useClimate, ZONE_LABELS } from "@/lib/climate";
 import PlantCard from "@/components/PlantCard";
+import Onboarding from "@/components/Onboarding";
 
 const SECTIONS: { action: ActionType; titre: string; intro: string }[] = [
   {
@@ -41,6 +42,7 @@ export default function MonthDashboard() {
 
   return (
     <div className="space-y-8">
+      <Onboarding />
       <section className="rounded-2xl bg-gradient-to-br from-emerald-600 to-green-500 p-6 text-white sm:p-8">
         <p className="text-sm font-medium uppercase tracking-wide text-emerald-100">
           Nous sommes en

@@ -7,6 +7,7 @@ import {
   EXPOSITION_LABELS,
   BESOIN_EAU_LABELS,
 } from "@/lib/types";
+import { quantityLabel } from "@/lib/quantities";
 import AddToGarden from "@/components/AddToGarden";
 import PlantCalendar from "@/components/PlantCalendar";
 import PlantAvatar from "@/components/PlantAvatar";
@@ -36,6 +37,7 @@ export default async function PlantePage(props: PageProps<"/plantes/[id]">) {
     { label: "Sol", value: plant.sol },
     { label: "Espacement", value: plant.espacement },
     { label: "Temps de levée", value: plant.levee },
+    { label: "Quantité conseillée", value: quantityLabel(plant, 4) },
   ];
 
   return (

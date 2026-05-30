@@ -13,6 +13,7 @@ const LINKS = [
   { href: "/potager", label: "Plan", emoji: "🟫" },
   { href: "/mon-jardin", label: "Mon jardin", emoji: "🪴" },
   { href: "/journal", label: "Journal", emoji: "📖" },
+  { href: "/courses", label: "Courses", emoji: "🛒" },
 ];
 
 export default function Nav() {

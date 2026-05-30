@@ -5,6 +5,11 @@ import { usePlots, Plot } from "@/lib/plots";
 import { PLANTS, getPlantById } from "@/lib/plants";
 import { Category, CATEGORY_LABELS } from "@/lib/types";
 import { areIncompatible } from "@/lib/calendar";
+import {
+  rotationConflicts,
+  suggestionsForPlot,
+  PLOT_TEMPLATES,
+} from "@/lib/plot-logic";
 import PlantAvatar from "./PlantAvatar";
 
 type Brush = { type: "plant"; plantId: string } | { type: "eraser" } | null;
@@ -42,8 +47,16 @@ function conflictCells(plot: Plot): Set<number> {
 }
 
 export default function PotagerPlanner() {
-  const { plots, ready, addPlot, removePlot, renamePlot, setCell, resizePlot } =
-    usePlots();
+  const {
+    plots,
+    ready,
+    addPlot,
+    removePlot,
+    renamePlot,
+    setCell,
+    resizePlot,
+    setYear,
+  } = usePlots();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [brush, setBrush] = useState<Brush>(null);
   const [catFilter, setCatFilter] = useState<Category | "tous">("tous");
@@ -58,6 +71,16 @@ export default function PotagerPlanner() {
 
   const conflicts = useMemo(
     () => (selected ? conflictCells(selected) : new Set<number>()),
+    [selected]
+  );
+
+  const rotation = useMemo(
+    () => (selected ? rotationConflicts(selected) : new Set<number>()),
+    [selected]
+  );
+
+  const suggestions = useMemo(
+    () => (selected ? suggestionsForPlot(selected.cells) : []),
     [selected]
   );
 
@@ -128,6 +151,36 @@ export default function PotagerPlanner() {
         </button>
       </div>
 
+      {/* Modèles tout faits */}
+      <div className="rounded-xl border border-emerald-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4">
+        <p className="mb-1 text-sm font-semibold text-emerald-900 dark:text-emerald-50">
+          🌱 Pas d&apos;idée ? Partez d&apos;un modèle
+        </p>
+        <p className="mb-3 text-xs text-emerald-800/80 dark:text-emerald-100/80">
+          Un carré pré-rempli, à ajuster ensuite comme vous voulez.
+        </p>
+        <div className="flex flex-wrap gap-2">
+          {PLOT_TEMPLATES.map((t) => (
+            <button
+              key={t.id}
+              onClick={() => {
+                const id = addPlot(t.nom, t.rows, t.cols, [...t.cells]);
+                setSelectedId(id);
+              }}
+              title={t.description}
+              className="rounded-xl border border-emerald-100 dark:border-zinc-700 px-3 py-2 text-left text-xs transition hover:border-emerald-300 hover:bg-emerald-50 dark:hover:border-zinc-600 dark:hover:bg-zinc-800"
+            >
+              <span className="block font-semibold text-emerald-900 dark:text-emerald-50">
+                {t.nom}
+              </span>
+              <span className="block text-emerald-700/80 dark:text-emerald-300/80">
+                {t.rows}×{t.cols} — {t.description}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+
       {plots.length === 0 ? (
         <div className="rounded-xl border border-dashed border-emerald-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 p-8 text-center">
           <p className="text-4xl">🟫</p>
@@ -165,14 +218,42 @@ export default function PotagerPlanner() {
               plot={selected}
               brush={brush}
               conflicts={conflicts}
+              rotation={rotation}
               onApply={applyBrush}
               onRename={(nom) => renamePlot(selected.id, nom)}
               onResize={(r, c) => resizePlot(selected.id, clamp(r), clamp(c))}
+              onSetYear={(y) => setYear(selected.id, y)}
               onDelete={() => {
                 removePlot(selected.id);
                 setSelectedId(null);
               }}
             />
+          )}
+
+          {/* Suggestions de voisines */}
+          {selected && suggestions.length > 0 && (
+            <div className="rounded-xl border border-emerald-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4">
+              <p className="mb-2 text-sm font-semibold text-emerald-900 dark:text-emerald-50">
+                💡 Bonnes voisines à ajouter
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {suggestions.map((id) => {
+                  const plant = getPlantById(id);
+                  if (!plant) return null;
+                  return (
+                    <button
+                      key={id}
+                      onClick={() => setBrush({ type: "plant", plantId: id })}
+                      title={`Choisir ${plant.nom} comme pinceau`}
+                      className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs text-emerald-800 transition hover:bg-emerald-100 dark:bg-zinc-800 dark:text-emerald-100 dark:hover:bg-zinc-700"
+                    >
+                      <span>{plant.emoji}</span>
+                      {plant.nom}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           )}
 
           {/* Palette */}
@@ -251,17 +332,21 @@ function PlotEditor({
   plot,
   brush,
   conflicts,
+  rotation,
   onApply,
   onRename,
   onResize,
+  onSetYear,
   onDelete,
 }: {
   plot: Plot;
   brush: Brush;
   conflicts: Set<number>;
+  rotation: Set<number>;
   onApply: (index: number) => void;
   onRename: (nom: string) => void;
   onResize: (rows: number, cols: number) => void;
+  onSetYear: (year: number) => void;
   onDelete: () => void;
 }) {
   return (
@@ -272,7 +357,15 @@ function PlotEditor({
           onChange={(e) => onRename(e.target.value)}
           className="rounded-lg border border-transparent px-1 text-lg font-bold text-emerald-900 dark:text-emerald-50 outline-none hover:border-emerald-200 dark:hover:border-zinc-700 focus:border-emerald-400 dark:focus:border-emerald-500"
         />
-        <div className="flex items-center gap-3 text-sm text-emerald-800 dark:text-emerald-100">
+        <div className="flex flex-wrap items-center gap-3 text-sm text-emerald-800 dark:text-emerald-100">
+          <Stepper
+            label="Année"
+            value={plot.year}
+            onChange={(v) => onSetYear(v)}
+            min={2000}
+            max={2100}
+            width="w-12"
+          />
           <Stepper
             label="Lignes"
             value={plot.rows}
@@ -300,20 +393,23 @@ function PlotEditor({
           {plot.cells.map((cellId, index) => {
             const plant = cellId ? getPlantById(cellId) : null;
             const inConflict = conflicts.has(index);
+            const inRotation = rotation.has(index);
+            const cellClass = inConflict
+              ? "border-rose-400 dark:border-rose-700 bg-rose-50 dark:bg-rose-950 ring-1 ring-rose-300 dark:ring-rose-700"
+              : inRotation
+                ? "border-amber-400 dark:border-amber-600 bg-amber-50 dark:bg-amber-950 ring-1 ring-amber-300 dark:ring-amber-700"
+                : "border-amber-200/70 dark:border-zinc-700/70 bg-white dark:bg-zinc-900 hover:border-emerald-300 dark:hover:border-zinc-600 hover:bg-emerald-50 dark:hover:bg-zinc-800";
+            const title = inConflict
+              ? "Voisinage déconseillé"
+              : inRotation
+                ? "Rotation : même famille ici récemment"
+                : plant?.nom ?? "Case vide";
             return (
               <button
                 key={index}
                 onClick={() => onApply(index)}
-                title={
-                  inConflict
-                    ? "Voisinage déconseillé"
-                    : plant?.nom ?? "Case vide"
-                }
-                className={`flex h-13 w-13 items-center justify-center rounded-md border text-2xl transition ${
-                  inConflict
-                    ? "border-rose-400 dark:border-rose-700 bg-rose-50 dark:bg-rose-950 ring-1 ring-rose-300 dark:ring-rose-700"
-                    : "border-amber-200/70 dark:border-zinc-700/70 bg-white dark:bg-zinc-900 hover:border-emerald-300 dark:hover:border-zinc-600 hover:bg-emerald-50 dark:hover:bg-zinc-800"
-                }`}
+                title={title}
+                className={`flex h-13 w-13 items-center justify-center rounded-md border text-2xl transition ${cellClass}`}
                 style={{ height: "3.25rem", width: "3.25rem" }}
               >
                 {plant ? (
@@ -322,6 +418,11 @@ function PlotEditor({
                     {inConflict && (
                       <span className="absolute -right-2 -top-2 text-xs">
                         ⚠️
+                      </span>
+                    )}
+                    {!inConflict && inRotation && (
+                      <span className="absolute -right-2 -top-2 text-xs">
+                        🔁
                       </span>
                     )}
                   </span>
@@ -347,7 +448,11 @@ function PlotEditor({
         </span>
         <span className="flex items-center gap-1">
           <span className="inline-block h-3 w-3 rounded-sm border border-rose-400 dark:border-rose-700 bg-rose-50 dark:bg-rose-950" />
-          voisinage déconseillé
+          ⚠️ voisinage déconseillé
+        </span>
+        <span className="flex items-center gap-1">
+          <span className="inline-block h-3 w-3 rounded-sm border border-amber-400 dark:border-amber-600 bg-amber-50 dark:bg-amber-950" />
+          🔁 rotation (même famille récemment)
         </span>
       </div>
     </div>
@@ -358,23 +463,29 @@ function Stepper({
   label,
   value,
   onChange,
+  min = 1,
+  max = 10,
+  width = "w-5",
 }: {
   label: string;
   value: number;
   onChange: (v: number) => void;
+  min?: number;
+  max?: number;
+  width?: string;
 }) {
   return (
     <span className="flex items-center gap-1">
       <span className="text-xs text-emerald-700 dark:text-emerald-300">{label}</span>
       <button
-        onClick={() => onChange(value - 1)}
+        onClick={() => onChange(Math.max(min, value - 1))}
         className="h-6 w-6 rounded-full bg-emerald-50 dark:bg-zinc-800 text-emerald-800 dark:text-emerald-100 hover:bg-emerald-100 dark:hover:bg-zinc-700"
       >
         −
       </button>
-      <span className="w-5 text-center font-medium">{value}</span>
+      <span className={`${width} text-center font-medium`}>{value}</span>
       <button
-        onClick={() => onChange(value + 1)}
+        onClick={() => onChange(Math.min(max, value + 1))}
         className="h-6 w-6 rounded-full bg-emerald-50 dark:bg-zinc-800 text-emerald-800 dark:text-emerald-100 hover:bg-emerald-100 dark:hover:bg-zinc-700"
       >
         +

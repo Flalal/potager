@@ -10,6 +10,8 @@ import {
   monthlyTasks,
   TASK_KIND_STYLE,
 } from "@/lib/calendar";
+import { expectedHarvestMonth } from "@/lib/garden-calc";
+import { useTaskDone, taskKey } from "@/lib/tasks";
 import { useClimate } from "@/lib/climate";
 import PlantAvatar from "./PlantAvatar";
 
@@ -26,7 +28,9 @@ function formatDate(iso: string): string {
 export default function MonJardin() {
   const { plantations, ready, remove } = useGarden();
   const { offset } = useClimate();
+  const { isDone, toggle } = useTaskDone();
   const month = getCurrentMonth();
+  const year = new Date().getFullYear();
 
   if (!ready) {
     return (
@@ -81,7 +85,7 @@ export default function MonJardin() {
 
         const tasks = monthlyTasks(plant, month, offset);
         const recolte = shiftMonths(plant.recolte, offset);
-        const prochaineRecolte = recolte.find((m) => m >= month);
+        const prevue = expectedHarvestMonth(plant, p.datePlantation, offset);
 
         return (
           <div
@@ -115,13 +119,13 @@ export default function MonJardin() {
                   <span className="rounded-full bg-emerald-100 dark:bg-emerald-900 px-3 py-1 text-xs font-semibold text-emerald-800 dark:text-emerald-100">
                     🧺 Récolte en cours
                   </span>
-                ) : prochaineRecolte ? (
+                ) : prevue ? (
                   <span className="rounded-full bg-emerald-50 dark:bg-zinc-800 px-3 py-1 text-xs text-emerald-700 dark:text-emerald-300">
-                    Récolte vers {MONTHS_FR[prochaineRecolte - 1]}
+                    Récolte prévue vers {MONTHS_FR[prevue - 1]}
                   </span>
                 ) : (
                   <span className="rounded-full bg-emerald-50 dark:bg-zinc-800 px-3 py-1 text-xs text-emerald-700 dark:text-emerald-300">
-                    Récolte passée cette année
+                    Récolte à venir
                   </span>
                 )}
               </div>
@@ -141,14 +145,25 @@ export default function MonJardin() {
                   À faire ce mois-ci
                 </p>
                 <div className="flex flex-wrap gap-1.5">
-                  {tasks.map((t, i) => (
-                    <span
-                      key={i}
-                      className={`rounded-full px-2.5 py-1 text-xs ${TASK_KIND_STYLE[t.kind]}`}
-                    >
-                      {t.label}
-                    </span>
-                  ))}
+                  {tasks.map((t, i) => {
+                    const key = taskKey(p.uid, year, month, t.label);
+                    const done = isDone(key);
+                    return (
+                      <button
+                        key={i}
+                        onClick={() => toggle(key)}
+                        title={done ? "Marquer à faire" : "Marquer comme fait"}
+                        className={`flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs transition ${
+                          done
+                            ? "bg-emerald-50 text-emerald-700/50 line-through dark:bg-zinc-800 dark:text-emerald-300/50"
+                            : TASK_KIND_STYLE[t.kind]
+                        }`}
+                      >
+                        <span>{done ? "✅" : "⬜"}</span>
+                        {t.label}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}

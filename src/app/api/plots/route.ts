@@ -26,6 +26,19 @@ export async function POST(request: Request) {
   const cells = Array.isArray(body.cells)
     ? body.cells
     : Array<string | null>(rows * cols).fill(null);
-  addPlot({ id: String(body.id), nom: String(body.nom), rows, cols, cells });
+  const year = Number(body.year ?? 0);
+  const layouts =
+    body.layouts && typeof body.layouts === "object"
+      ? body.layouts
+      : { [String(year)]: cells };
+  addPlot({
+    id: String(body.id),
+    nom: String(body.nom),
+    rows,
+    cols,
+    cells,
+    year,
+    layouts,
+  });
   return NextResponse.json({ ok: true }, { status: 201 });
 }

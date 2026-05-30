@@ -26,3 +26,21 @@ body {
   color: var(--foreground);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
 }
+
+/* Impression : on masque la navigation et on force un fond clair lisible. */
+@media print {
+  header,
+  footer,
+  .no-print {
+    display: none !important;
+  }
+  html,
+  body {
+    background: #ffffff !important;
+    color: #111111 !important;
+  }
+  main {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+}

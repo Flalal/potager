@@ -68,7 +68,30 @@ CREATE TABLE IF NOT EXISTS journal_entries (
   unite       TEXT NOT NULL DEFAULT '',
   created_at  INTEGER NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS task_done (
+  key         TEXT PRIMARY KEY,
+  created_at  INTEGER NOT NULL
+);
 `;
+
+/**
+ * Migrations idempotentes (node:sqlite n'a pas de système de versions).
+ * Chaque ALTER échoue silencieusement si la colonne existe déjà.
+ */
+function migrate(db: DatabaseSync) {
+  const alters = [
+    "ALTER TABLE plots ADD COLUMN year INTEGER NOT NULL DEFAULT 0",
+    "ALTER TABLE plots ADD COLUMN layouts TEXT NOT NULL DEFAULT '{}'",
+  ];
+  for (const sql of alters) {
+    try {
+      db.exec(sql);
+    } catch {
+      // colonne déjà présente
+    }
+  }
+}
 
 function createDb(): DatabaseSync {
   mkdirSync(dirname(DB_PATH), { recursive: true });
@@ -77,6 +100,7 @@ function createDb(): DatabaseSync {
   db.exec("PRAGMA journal_mode = WAL;");
   db.exec("PRAGMA foreign_keys = ON;");
   db.exec(SCHEMA);
+  migrate(db);
   return db;
 }
 
