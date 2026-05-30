@@ -39,25 +39,25 @@ export default async function PlantePage(props: PageProps<"/plantes/[id]">) {
 
   return (
     <div className="space-y-6">
-      <Link href="/plantes" className="text-sm text-emerald-600 hover:underline">
+      <Link href="/plantes" className="text-sm text-emerald-600 dark:text-emerald-400 hover:underline">
         ← Toutes les plantes
       </Link>
 
       <header className="flex flex-wrap items-center gap-4">
         <PlantAvatar emoji={plant.emoji} category={plant.category} size="lg" />
         <div className="flex-1">
-          <h1 className="text-3xl font-bold text-emerald-900">{plant.nom}</h1>
+          <h1 className="text-3xl font-bold text-emerald-900 dark:text-emerald-50">{plant.nom}</h1>
           <div className="mt-1 flex flex-wrap gap-1.5 text-xs">
-            <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-emerald-700">
+            <span className="rounded-full bg-emerald-50 dark:bg-zinc-800 px-2 py-0.5 text-emerald-700 dark:text-emerald-300">
               {CATEGORY_LABELS[plant.category]}
             </span>
-            <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-emerald-700">
+            <span className="rounded-full bg-emerald-50 dark:bg-zinc-800 px-2 py-0.5 text-emerald-700 dark:text-emerald-300">
               {DIFFICULTY_LABELS[plant.difficulty]}
             </span>
-            <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-emerald-700">
+            <span className="rounded-full bg-emerald-50 dark:bg-zinc-800 px-2 py-0.5 text-emerald-700 dark:text-emerald-300">
               {EXPOSITION_LABELS[plant.exposition]}
             </span>
-            <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-emerald-700">
+            <span className="rounded-full bg-emerald-50 dark:bg-zinc-800 px-2 py-0.5 text-emerald-700 dark:text-emerald-300">
               Famille : {plant.famille}
             </span>
           </div>
@@ -68,21 +68,21 @@ export default async function PlantePage(props: PageProps<"/plantes/[id]">) {
       <PlantCalendar plant={plant} />
 
       {/* Conseil débutant */}
-      <section className="rounded-xl border border-amber-200 bg-amber-50 p-4">
-        <h2 className="mb-1 font-bold text-amber-900">💡 Conseil débutant</h2>
-        <p className="text-sm text-amber-900/90">{plant.conseils}</p>
+      <section className="rounded-xl border border-amber-200 dark:border-zinc-700 bg-amber-50 dark:bg-amber-950 p-4">
+        <h2 className="mb-1 font-bold text-amber-900 dark:text-amber-200">💡 Conseil débutant</h2>
+        <p className="text-sm text-amber-900/90 dark:text-amber-200/90">{plant.conseils}</p>
       </section>
 
       {/* Soins au fil de la saison */}
       {plant.soins.length > 0 && (
-        <section className="rounded-xl border border-emerald-100 bg-white p-4">
-          <h2 className="mb-3 font-bold text-emerald-900">
+        <section className="rounded-xl border border-emerald-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4">
+          <h2 className="mb-3 font-bold text-emerald-900 dark:text-emerald-50">
             🛠️ Entretien au fil de la saison
           </h2>
           <ul className="space-y-2">
             {plant.soins.map((soin, i) => (
-              <li key={i} className="flex gap-2 text-sm text-emerald-900">
-                <span className="text-emerald-500">•</span>
+              <li key={i} className="flex gap-2 text-sm text-emerald-900 dark:text-emerald-50">
+                <span className="text-emerald-500 dark:text-emerald-400">•</span>
                 <span>{soin.titre}</span>
               </li>
             ))}
@@ -95,19 +95,19 @@ export default async function PlantePage(props: PageProps<"/plantes/[id]">) {
         {infos.map((info) => (
           <div
             key={info.label}
-            className="rounded-xl border border-emerald-100 bg-white p-4"
+            className="rounded-xl border border-emerald-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4"
           >
-            <p className="text-xs font-semibold uppercase tracking-wide text-emerald-600">
+            <p className="text-xs font-semibold uppercase tracking-wide text-emerald-600 dark:text-emerald-400">
               {info.label}
             </p>
-            <p className="mt-1 text-sm text-emerald-900">{info.value}</p>
+            <p className="mt-1 text-sm text-emerald-900 dark:text-emerald-50">{info.value}</p>
           </div>
         ))}
       </section>
 
       {/* Ravageurs */}
-      <section className="rounded-xl border border-emerald-100 bg-white p-4">
-        <h3 className="mb-2 font-bold text-emerald-800">
+      <section className="rounded-xl border border-emerald-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4">
+        <h3 className="mb-2 font-bold text-emerald-800 dark:text-emerald-100">
           🐛 Ravageurs &amp; maladies à surveiller
         </h3>
         {plant.ravageurs.length ? (
@@ -122,16 +122,16 @@ export default async function PlantePage(props: PageProps<"/plantes/[id]">) {
             ))}
           </div>
         ) : (
-          <p className="text-sm text-emerald-700/60">
+          <p className="text-sm text-emerald-700/60 dark:text-emerald-300/60">
             Pas de problème majeur connu.
           </p>
         )}
       </section>
 
       {/* Rotation */}
-      <section className="rounded-xl border border-emerald-100 bg-white p-4">
-        <h3 className="mb-1 font-bold text-emerald-800">🔄 Rotation des cultures</h3>
-        <p className="text-sm text-emerald-900">
+      <section className="rounded-xl border border-emerald-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4">
+        <h3 className="mb-1 font-bold text-emerald-800 dark:text-emerald-100">🔄 Rotation des cultures</h3>
+        <p className="text-sm text-emerald-900 dark:text-emerald-50">
           Famille des <strong>{plant.famille}</strong>. Évitez de la cultiver au
           même endroit (ou après une autre plante de cette famille) avant 3 à 4
           ans, pour limiter maladies et épuisement du sol.
@@ -140,40 +140,40 @@ export default async function PlantePage(props: PageProps<"/plantes/[id]">) {
 
       {/* Compagnonnage */}
       <section className="grid gap-3 sm:grid-cols-2">
-        <div className="rounded-xl border border-emerald-100 bg-white p-4">
-          <h3 className="mb-2 font-bold text-emerald-800">✅ Bons compagnons</h3>
+        <div className="rounded-xl border border-emerald-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4">
+          <h3 className="mb-2 font-bold text-emerald-800 dark:text-emerald-100">✅ Bons compagnons</h3>
           {plant.compagnonsFavorables.length ? (
             <div className="flex flex-wrap gap-1.5">
               {plant.compagnonsFavorables.map((c) => (
                 <span
                   key={c}
-                  className="rounded-full bg-emerald-100 px-2.5 py-1 text-xs text-emerald-800"
+                  className="rounded-full bg-emerald-100 dark:bg-emerald-900 px-2.5 py-1 text-xs text-emerald-800 dark:text-emerald-100"
                 >
                   {c}
                 </span>
               ))}
             </div>
           ) : (
-            <p className="text-sm text-emerald-700/60">
+            <p className="text-sm text-emerald-700/60 dark:text-emerald-300/60">
               Pas d&apos;association particulière.
             </p>
           )}
         </div>
-        <div className="rounded-xl border border-emerald-100 bg-white p-4">
-          <h3 className="mb-2 font-bold text-rose-700">❌ À éviter à côté</h3>
+        <div className="rounded-xl border border-emerald-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4">
+          <h3 className="mb-2 font-bold text-rose-700 dark:text-rose-300">❌ À éviter à côté</h3>
           {plant.compagnonsDefavorables.length ? (
             <div className="flex flex-wrap gap-1.5">
               {plant.compagnonsDefavorables.map((c) => (
                 <span
                   key={c}
-                  className="rounded-full bg-rose-100 px-2.5 py-1 text-xs text-rose-800"
+                  className="rounded-full bg-rose-100 dark:bg-rose-900 px-2.5 py-1 text-xs text-rose-800 dark:text-rose-200"
                 >
                   {c}
                 </span>
               ))}
             </div>
           ) : (
-            <p className="text-sm text-emerald-700/60">
+            <p className="text-sm text-emerald-700/60 dark:text-emerald-300/60">
               Aucune incompatibilité connue.
             </p>
           )}

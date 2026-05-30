@@ -64,7 +64,7 @@ export default function CalendarGrid() {
             className={`rounded-full px-3 py-1.5 text-sm font-medium transition ${
               filter === cat
                 ? "bg-emerald-600 text-white"
-                : "bg-white text-emerald-800 ring-1 ring-emerald-100 hover:bg-emerald-50"
+                : "bg-white dark:bg-zinc-900 text-emerald-800 dark:text-emerald-100 ring-1 ring-emerald-100 dark:ring-zinc-800 hover:bg-emerald-50 dark:hover:bg-zinc-800"
             }`}
           >
             {CAT_LABEL[cat]}
@@ -82,12 +82,12 @@ export default function CalendarGrid() {
             className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition ${
               isActive(a)
                 ? `${ACTION_COLORS[a].bg} ${ACTION_COLORS[a].text} ring-1 ring-inset ring-current/20`
-                : "bg-white text-emerald-700/50 ring-1 ring-emerald-100 hover:bg-emerald-50"
+                : "bg-white dark:bg-zinc-900 text-emerald-700/50 dark:text-emerald-300/50 ring-1 ring-emerald-100 dark:ring-zinc-800 hover:bg-emerald-50 dark:hover:bg-zinc-800"
             }`}
           >
             <span
               className={`h-3 w-3 rounded-sm ${
-                isActive(a) ? ACTION_COLORS[a].dot : "bg-emerald-200"
+                isActive(a) ? ACTION_COLORS[a].dot : "bg-emerald-200 dark:bg-zinc-700"
               }`}
             />
             {ACTION_COLORS[a].label}
@@ -96,18 +96,18 @@ export default function CalendarGrid() {
         {filtered && (
           <button
             onClick={() => setActiveActions(new Set(ORDER))}
-            className="ml-1 text-xs text-emerald-600 underline-offset-2 hover:underline"
+            className="ml-1 text-xs text-emerald-600 dark:text-emerald-400 underline-offset-2 hover:underline"
           >
             Tout afficher
           </button>
         )}
       </div>
 
-      <div className="overflow-x-auto rounded-xl border border-emerald-100 bg-white">
+      <div className="overflow-x-auto rounded-xl border border-emerald-100 dark:border-zinc-800 bg-white dark:bg-zinc-900">
         <table className="w-full border-collapse text-sm">
           <thead>
             <tr>
-              <th className="sticky left-0 z-10 bg-emerald-50 px-3 py-2 text-left font-semibold text-emerald-900">
+              <th className="sticky left-0 z-10 bg-emerald-50 dark:bg-zinc-800 px-3 py-2 text-left font-semibold text-emerald-900 dark:text-emerald-50">
                 Plante
               </th>
               {MONTHS_SHORT.map((m, i) => (
@@ -115,8 +115,8 @@ export default function CalendarGrid() {
                   key={m}
                   className={`px-1 py-2 text-center text-xs font-semibold ${
                     i + 1 === currentMonth
-                      ? "bg-emerald-100 text-emerald-900"
-                      : "text-emerald-700/70"
+                      ? "bg-emerald-100 dark:bg-emerald-900 text-emerald-900 dark:text-emerald-50"
+                      : "text-emerald-700/70 dark:text-emerald-300/70"
                   }`}
                 >
                   {m}
@@ -126,11 +126,11 @@ export default function CalendarGrid() {
           </thead>
           <tbody>
             {plants.map((plant) => (
-              <tr key={plant.id} className="border-t border-emerald-50">
-                <td className="sticky left-0 z-10 bg-white px-3 py-1.5">
+              <tr key={plant.id} className="border-t border-emerald-50 dark:border-zinc-800">
+                <td className="sticky left-0 z-10 bg-white dark:bg-zinc-900 px-3 py-1.5">
                   <Link
                     href={`/plantes/${plant.id}`}
-                    className="flex items-center gap-2 whitespace-nowrap font-medium text-emerald-900 hover:text-emerald-600"
+                    className="flex items-center gap-2 whitespace-nowrap font-medium text-emerald-900 dark:text-emerald-50 hover:text-emerald-600 dark:hover:text-emerald-400"
                   >
                     <span>{plant.emoji}</span>
                     {plant.nom}
@@ -147,7 +147,7 @@ export default function CalendarGrid() {
                     <td
                       key={month}
                       className={`px-1 py-1.5 ${
-                        month === currentMonth ? "bg-emerald-50/60" : ""
+                        month === currentMonth ? "bg-emerald-50/60 dark:bg-zinc-800/60" : ""
                       }`}
                     >
                       <div className="flex justify-center gap-0.5">

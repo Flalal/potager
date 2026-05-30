@@ -1,8 +1,17 @@
 @import "tailwindcss";
 
+/* Mode sombre piloté par la classe `.dark` sur <html> (et non par la seule
+   préférence système), pour permettre un bouton de bascule. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #f7faf5;
   --foreground: #1f2a1a;
+}
+
+.dark {
+  --background: #0c1410;
+  --foreground: #e7f0e7;
 }
 
 @theme inline {

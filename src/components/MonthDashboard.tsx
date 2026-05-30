@@ -70,7 +70,7 @@ export default function MonthDashboard() {
                 aria-pressed={isActive}
                 className={`flex items-center gap-1.5 rounded-full px-3 py-1 font-medium transition ${
                   isActive
-                    ? "bg-white text-emerald-800 shadow-sm"
+                    ? "bg-white dark:bg-zinc-900 text-emerald-800 dark:text-emerald-100 shadow-sm"
                     : "bg-white/15 text-white hover:bg-white/25"
                 }`}
               >
@@ -104,16 +104,16 @@ export default function MonthDashboard() {
               <span
                 className={`h-3 w-3 rounded-full ${ACTION_COLORS[section.action].dot}`}
               />
-              <h2 className="text-xl font-bold text-emerald-900">
+              <h2 className="text-xl font-bold text-emerald-900 dark:text-emerald-50">
                 {section.titre}
-                <span className="ml-2 text-sm font-normal text-emerald-700/70">
+                <span className="ml-2 text-sm font-normal text-emerald-700/70 dark:text-emerald-300/70">
                   {plants.length}
                 </span>
               </h2>
             </div>
-            <p className="mb-4 text-sm text-emerald-800/80">{section.intro}</p>
+            <p className="mb-4 text-sm text-emerald-800/80 dark:text-emerald-100/80">{section.intro}</p>
             {plants.length === 0 ? (
-              <p className="rounded-xl border border-dashed border-emerald-200 bg-white p-4 text-sm text-emerald-700/70">
+              <p className="rounded-xl border border-dashed border-emerald-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 p-4 text-sm text-emerald-700/70 dark:text-emerald-300/70">
                 Rien de prévu pour {section.titre.toLowerCase()} en {moisNom}.
               </p>
             ) : (
@@ -131,12 +131,12 @@ export default function MonthDashboard() {
         );
       })}
 
-      <section className="rounded-xl border border-emerald-100 bg-white p-5 text-center">
-        <p className="text-emerald-800">
+      <section className="rounded-xl border border-emerald-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5 text-center">
+        <p className="text-emerald-800 dark:text-emerald-100">
           Envie de voir l&apos;année entière ?{" "}
           <Link
             href="/calendrier"
-            className="font-semibold text-emerald-600 underline-offset-2 hover:underline"
+            className="font-semibold text-emerald-600 dark:text-emerald-400 underline-offset-2 hover:underline"
           >
             Ouvrir le calendrier complet
           </Link>

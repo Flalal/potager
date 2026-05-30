@@ -10,20 +10,20 @@ export default function LoginPage() {
 
   return (
     <div className="mx-auto flex min-h-[70vh] max-w-sm flex-col justify-center">
-      <div className="rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm">
+      <div className="rounded-2xl border border-emerald-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 shadow-sm">
         <div className="mb-5 text-center">
           <p className="text-4xl">🌻</p>
-          <h1 className="mt-2 text-2xl font-bold text-emerald-900">
+          <h1 className="mt-2 text-2xl font-bold text-emerald-900 dark:text-emerald-50">
             Mon Potager
           </h1>
-          <p className="mt-1 text-sm text-emerald-800/70">
+          <p className="mt-1 text-sm text-emerald-800/70 dark:text-emerald-100/70">
             Entrez le mot de passe du foyer pour accéder à votre jardin.
           </p>
         </div>
 
         <form action={action} className="space-y-3">
           <label className="block">
-            <span className="text-xs font-medium text-emerald-700">
+            <span className="text-xs font-medium text-emerald-700 dark:text-emerald-300">
               Mot de passe
             </span>
             <input
@@ -31,12 +31,12 @@ export default function LoginPage() {
               type="password"
               autoFocus
               autoComplete="current-password"
-              className="mt-1 block w-full rounded-lg border border-emerald-200 px-3 py-2 text-sm outline-none focus:border-emerald-400"
+              className="mt-1 block w-full rounded-lg border border-emerald-200 dark:border-zinc-700 px-3 py-2 text-sm outline-none focus:border-emerald-400 dark:focus:border-emerald-500"
             />
           </label>
 
           {state?.error && (
-            <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">
+            <p className="rounded-lg bg-rose-50 dark:bg-rose-950 px-3 py-2 text-sm text-rose-700 dark:text-rose-300">
               {state.error}
             </p>
           )}

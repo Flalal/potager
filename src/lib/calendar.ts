@@ -118,9 +118,10 @@ export function monthlyTasks(
 }
 
 export const TASK_KIND_STYLE: Record<TaskKind, string> = {
-  recolte: "bg-emerald-100 text-emerald-800",
-  soin: "bg-sky-50 text-sky-800",
-  arrosage: "bg-amber-50 text-amber-800",
+  recolte:
+    "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-100",
+  soin: "bg-sky-50 text-sky-800 dark:bg-sky-950 dark:text-sky-200",
+  arrosage: "bg-amber-50 text-amber-800 dark:bg-amber-950 dark:text-amber-200",
 };
 
 export const ACTION_COLORS: Record<
@@ -128,20 +129,20 @@ export const ACTION_COLORS: Record<
   { bg: string; text: string; dot: string; label: string }
 > = {
   semis: {
-    bg: "bg-amber-100",
-    text: "text-amber-800",
+    bg: "bg-amber-100 dark:bg-amber-900",
+    text: "text-amber-800 dark:text-amber-200",
     dot: "bg-amber-500",
     label: "Semis",
   },
   plantation: {
-    bg: "bg-sky-100",
-    text: "text-sky-800",
+    bg: "bg-sky-100 dark:bg-sky-900",
+    text: "text-sky-800 dark:text-sky-200",
     dot: "bg-sky-500",
     label: "Plantation",
   },
   recolte: {
-    bg: "bg-emerald-100",
-    text: "text-emerald-800",
+    bg: "bg-emerald-100 dark:bg-emerald-900",
+    text: "text-emerald-800 dark:text-emerald-100",
     dot: "bg-emerald-600",
     label: "Récolte",
   },

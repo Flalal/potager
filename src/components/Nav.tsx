@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ZoneSelect from "./ZoneSelect";
+import ThemeToggle from "./ThemeToggle";
 import { logout } from "@/app/actions/auth";
 
 const LINKS = [
@@ -23,9 +24,9 @@ export default function Nav() {
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <header className="sticky top-0 z-20 border-b border-emerald-100 bg-white/90 backdrop-blur">
+    <header className="sticky top-0 z-20 border-b border-emerald-100 dark:border-zinc-800 bg-white/90 dark:bg-zinc-900/90 backdrop-blur">
       <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-3">
-        <Link href="/" className="flex items-center gap-2 font-bold text-emerald-700">
+        <Link href="/" className="flex items-center gap-2 font-bold text-emerald-700 dark:text-emerald-300">
           <span className="text-2xl">🌻</span>
           <span className="hidden sm:inline">Mon Potager</span>
         </Link>
@@ -37,7 +38,7 @@ export default function Nav() {
               className={`flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium transition ${
                 isActive(link.href)
                   ? "bg-emerald-600 text-white"
-                  : "text-emerald-800 hover:bg-emerald-50"
+                  : "text-emerald-800 dark:text-emerald-100 hover:bg-emerald-50 dark:hover:bg-zinc-800"
               }`}
             >
               <span>{link.emoji}</span>
@@ -47,11 +48,12 @@ export default function Nav() {
         </nav>
         <div className="flex items-center gap-2">
           <ZoneSelect />
+          <ThemeToggle />
           <form action={logout}>
             <button
               type="submit"
               title="Se déconnecter"
-              className="rounded-full px-2.5 py-1.5 text-sm text-emerald-700 transition hover:bg-emerald-50"
+              className="rounded-full px-2.5 py-1.5 text-sm text-emerald-700 dark:text-emerald-300 transition hover:bg-emerald-50 dark:hover:bg-zinc-800"
             >
               ⎋
             </button>

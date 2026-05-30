@@ -42,39 +42,39 @@ export default function AddToGarden({
   }
 
   return (
-    <div className="w-full rounded-xl border border-emerald-200 bg-white p-4 sm:w-72">
-      <p className="mb-3 text-sm font-semibold text-emerald-900">
+    <div className="w-full rounded-xl border border-emerald-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 p-4 sm:w-72">
+      <p className="mb-3 text-sm font-semibold text-emerald-900 dark:text-emerald-50">
         Planter « {plantNom} »
       </p>
       <div className="space-y-3 text-sm">
         <label className="block">
-          <span className="text-xs text-emerald-700">Date de plantation</span>
+          <span className="text-xs text-emerald-700 dark:text-emerald-300">Date de plantation</span>
           <input
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-emerald-200 px-2 py-1.5 outline-none focus:border-emerald-400"
+            className="mt-1 w-full rounded-lg border border-emerald-200 dark:border-zinc-700 px-2 py-1.5 outline-none focus:border-emerald-400 dark:focus:border-emerald-500"
           />
         </label>
         <div className="flex gap-3">
           <label className="block w-20">
-            <span className="text-xs text-emerald-700">Quantité</span>
+            <span className="text-xs text-emerald-700 dark:text-emerald-300">Quantité</span>
             <input
               type="number"
               min={1}
               value={quantite}
               onChange={(e) => setQuantite(Math.max(1, Number(e.target.value)))}
-              className="mt-1 w-full rounded-lg border border-emerald-200 px-2 py-1.5 outline-none focus:border-emerald-400"
+              className="mt-1 w-full rounded-lg border border-emerald-200 dark:border-zinc-700 px-2 py-1.5 outline-none focus:border-emerald-400 dark:focus:border-emerald-500"
             />
           </label>
           <label className="block flex-1">
-            <span className="text-xs text-emerald-700">Emplacement</span>
+            <span className="text-xs text-emerald-700 dark:text-emerald-300">Emplacement</span>
             <input
               type="text"
               value={emplacement}
               onChange={(e) => setEmplacement(e.target.value)}
               placeholder="ex: balcon"
-              className="mt-1 w-full rounded-lg border border-emerald-200 px-2 py-1.5 outline-none focus:border-emerald-400"
+              className="mt-1 w-full rounded-lg border border-emerald-200 dark:border-zinc-700 px-2 py-1.5 outline-none focus:border-emerald-400 dark:focus:border-emerald-500"
             />
           </label>
         </div>
@@ -88,7 +88,7 @@ export default function AddToGarden({
         </button>
         <button
           onClick={() => setOpen(false)}
-          className="rounded-full px-3 py-1.5 text-sm text-emerald-700 hover:bg-emerald-50"
+          className="rounded-full px-3 py-1.5 text-sm text-emerald-700 dark:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-zinc-800"
         >
           Annuler
         </button>

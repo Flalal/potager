@@ -30,18 +30,18 @@ export default function MonJardin() {
 
   if (!ready) {
     return (
-      <p className="text-sm text-emerald-700/60">Chargement de votre jardin…</p>
+      <p className="text-sm text-emerald-700/60 dark:text-emerald-300/60">Chargement de votre jardin…</p>
     );
   }
 
   if (plantations.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed border-emerald-200 bg-white p-8 text-center">
+      <div className="rounded-xl border border-dashed border-emerald-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 p-8 text-center">
         <p className="text-4xl">🪴</p>
-        <p className="mt-3 font-semibold text-emerald-900">
+        <p className="mt-3 font-semibold text-emerald-900 dark:text-emerald-50">
           Votre jardin est vide
         </p>
-        <p className="mt-1 text-sm text-emerald-800/80">
+        <p className="mt-1 text-sm text-emerald-800/80 dark:text-emerald-100/80">
           Ouvrez une fiche plante et cliquez sur « Ajouter à mon jardin » pour
           commencer le suivi.
         </p>
@@ -86,7 +86,7 @@ export default function MonJardin() {
         return (
           <div
             key={p.uid}
-            className="rounded-xl border border-emerald-100 bg-white p-4"
+            className="rounded-xl border border-emerald-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4"
           >
             <div className="flex flex-wrap items-center gap-4">
               <Link href={`/plantes/${plant.id}`}>
@@ -99,11 +99,11 @@ export default function MonJardin() {
               <div className="min-w-[140px] flex-1">
                 <Link
                   href={`/plantes/${plant.id}`}
-                  className="font-semibold text-emerald-900 hover:text-emerald-600"
+                  className="font-semibold text-emerald-900 dark:text-emerald-50 hover:text-emerald-600 dark:hover:text-emerald-400"
                 >
                   {plant.nom}
                 </Link>
-                <p className="text-xs text-emerald-700/80">
+                <p className="text-xs text-emerald-700/80 dark:text-emerald-300/80">
                   Planté le {formatDate(p.datePlantation)} · {p.quantite}{" "}
                   {p.quantite > 1 ? "plants" : "plant"}
                   {p.emplacement ? ` · ${p.emplacement}` : ""}
@@ -112,15 +112,15 @@ export default function MonJardin() {
 
               <div className="text-sm">
                 {recolte.includes(month) ? (
-                  <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">
+                  <span className="rounded-full bg-emerald-100 dark:bg-emerald-900 px-3 py-1 text-xs font-semibold text-emerald-800 dark:text-emerald-100">
                     🧺 Récolte en cours
                   </span>
                 ) : prochaineRecolte ? (
-                  <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs text-emerald-700">
+                  <span className="rounded-full bg-emerald-50 dark:bg-zinc-800 px-3 py-1 text-xs text-emerald-700 dark:text-emerald-300">
                     Récolte vers {MONTHS_FR[prochaineRecolte - 1]}
                   </span>
                 ) : (
-                  <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs text-emerald-700">
+                  <span className="rounded-full bg-emerald-50 dark:bg-zinc-800 px-3 py-1 text-xs text-emerald-700 dark:text-emerald-300">
                     Récolte passée cette année
                   </span>
                 )}
@@ -128,7 +128,7 @@ export default function MonJardin() {
 
               <button
                 onClick={() => remove(p.uid)}
-                className="rounded-full px-2 py-1 text-xs text-rose-600 hover:bg-rose-50"
+                className="rounded-full px-2 py-1 text-xs text-rose-600 dark:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-950"
                 title="Retirer de mon jardin"
               >
                 Retirer
@@ -136,8 +136,8 @@ export default function MonJardin() {
             </div>
 
             {tasks.length > 0 && (
-              <div className="mt-3 border-t border-emerald-50 pt-3">
-                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-emerald-600">
+              <div className="mt-3 border-t border-emerald-50 dark:border-zinc-800 pt-3">
+                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-emerald-600 dark:text-emerald-400">
                   À faire ce mois-ci
                 </p>
                 <div className="flex flex-wrap gap-1.5">

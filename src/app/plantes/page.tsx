@@ -8,8 +8,8 @@ export default function PlantesPage() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-2xl font-bold text-emerald-900">Toutes les plantes</h1>
-        <p className="mt-1 text-sm text-emerald-800/80">
+        <h1 className="text-2xl font-bold text-emerald-900 dark:text-emerald-50">Toutes les plantes</h1>
+        <p className="mt-1 text-sm text-emerald-800/80 dark:text-emerald-100/80">
           Parcourez le catalogue et ouvrez une fiche pour les conseils de
           culture.
         </p>

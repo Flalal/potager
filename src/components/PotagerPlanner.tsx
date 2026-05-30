@@ -70,7 +70,7 @@ export default function PotagerPlanner() {
   );
 
   if (!ready) {
-    return <p className="text-sm text-emerald-700/60">Chargement…</p>;
+    return <p className="text-sm text-emerald-700/60 dark:text-emerald-300/60">Chargement…</p>;
   }
 
   const handleCreate = () => {
@@ -88,36 +88,36 @@ export default function PotagerPlanner() {
   return (
     <div className="space-y-5">
       {/* Création de carré */}
-      <div className="flex flex-wrap items-end gap-3 rounded-xl border border-emerald-100 bg-white p-4">
+      <div className="flex flex-wrap items-end gap-3 rounded-xl border border-emerald-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4">
         <label className="block">
-          <span className="text-xs text-emerald-700">Nom du carré</span>
+          <span className="text-xs text-emerald-700 dark:text-emerald-300">Nom du carré</span>
           <input
             value={newNom}
             onChange={(e) => setNewNom(e.target.value)}
             placeholder="ex: Carré nord"
-            className="mt-1 block w-40 rounded-lg border border-emerald-200 px-2 py-1.5 text-sm outline-none focus:border-emerald-400"
+            className="mt-1 block w-40 rounded-lg border border-emerald-200 dark:border-zinc-700 px-2 py-1.5 text-sm outline-none focus:border-emerald-400 dark:focus:border-emerald-500"
           />
         </label>
         <label className="block">
-          <span className="text-xs text-emerald-700">Lignes</span>
+          <span className="text-xs text-emerald-700 dark:text-emerald-300">Lignes</span>
           <input
             type="number"
             min={1}
             max={10}
             value={newRows}
             onChange={(e) => setNewRows(Number(e.target.value))}
-            className="mt-1 block w-20 rounded-lg border border-emerald-200 px-2 py-1.5 text-sm outline-none focus:border-emerald-400"
+            className="mt-1 block w-20 rounded-lg border border-emerald-200 dark:border-zinc-700 px-2 py-1.5 text-sm outline-none focus:border-emerald-400 dark:focus:border-emerald-500"
           />
         </label>
         <label className="block">
-          <span className="text-xs text-emerald-700">Colonnes</span>
+          <span className="text-xs text-emerald-700 dark:text-emerald-300">Colonnes</span>
           <input
             type="number"
             min={1}
             max={10}
             value={newCols}
             onChange={(e) => setNewCols(Number(e.target.value))}
-            className="mt-1 block w-20 rounded-lg border border-emerald-200 px-2 py-1.5 text-sm outline-none focus:border-emerald-400"
+            className="mt-1 block w-20 rounded-lg border border-emerald-200 dark:border-zinc-700 px-2 py-1.5 text-sm outline-none focus:border-emerald-400 dark:focus:border-emerald-500"
           />
         </label>
         <button
@@ -129,12 +129,12 @@ export default function PotagerPlanner() {
       </div>
 
       {plots.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-emerald-200 bg-white p-8 text-center">
+        <div className="rounded-xl border border-dashed border-emerald-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 p-8 text-center">
           <p className="text-4xl">🟫</p>
-          <p className="mt-3 font-semibold text-emerald-900">
+          <p className="mt-3 font-semibold text-emerald-900 dark:text-emerald-50">
             Aucun carré pour l&apos;instant
           </p>
-          <p className="mt-1 text-sm text-emerald-800/80">
+          <p className="mt-1 text-sm text-emerald-800/80 dark:text-emerald-100/80">
             Créez votre premier carré ci-dessus, puis placez-y vos plantes.
           </p>
         </div>
@@ -150,7 +150,7 @@ export default function PotagerPlanner() {
                   className={`rounded-full px-3 py-1.5 text-sm font-medium transition ${
                     selected?.id === p.id
                       ? "bg-emerald-600 text-white"
-                      : "bg-white text-emerald-800 ring-1 ring-emerald-100 hover:bg-emerald-50"
+                      : "bg-white dark:bg-zinc-900 text-emerald-800 dark:text-emerald-100 ring-1 ring-emerald-100 dark:ring-zinc-800 hover:bg-emerald-50 dark:hover:bg-zinc-800"
                   }`}
                 >
                   {p.nom}
@@ -176,9 +176,9 @@ export default function PotagerPlanner() {
           )}
 
           {/* Palette */}
-          <div className="rounded-xl border border-emerald-100 bg-white p-4">
+          <div className="rounded-xl border border-emerald-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4">
             <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-              <p className="text-sm font-semibold text-emerald-900">
+              <p className="text-sm font-semibold text-emerald-900 dark:text-emerald-50">
                 Palette — choisissez une plante puis cliquez les cases
               </p>
               <button
@@ -186,7 +186,7 @@ export default function PotagerPlanner() {
                 className={`rounded-full px-3 py-1 text-xs font-medium transition ${
                   brush?.type === "eraser"
                     ? "bg-rose-600 text-white"
-                    : "bg-rose-50 text-rose-700 hover:bg-rose-100"
+                    : "bg-rose-50 dark:bg-rose-950 text-rose-700 dark:text-rose-300 hover:bg-rose-100 dark:hover:bg-rose-900"
                 }`}
               >
                 🧽 Gomme
@@ -201,7 +201,7 @@ export default function PotagerPlanner() {
                   className={`rounded-full px-2.5 py-1 text-xs font-medium transition ${
                     catFilter === cat
                       ? "bg-emerald-600 text-white"
-                      : "bg-emerald-50 text-emerald-800 hover:bg-emerald-100"
+                      : "bg-emerald-50 dark:bg-zinc-800 text-emerald-800 dark:text-emerald-100 hover:bg-emerald-100 dark:hover:bg-zinc-700"
                   }`}
                 >
                   {CAT_LABEL[cat]}
@@ -219,8 +219,8 @@ export default function PotagerPlanner() {
                     onClick={() => setBrush({ type: "plant", plantId: plant.id })}
                     className={`flex flex-col items-center gap-1 rounded-lg p-2 text-center text-xs transition ${
                       active
-                        ? "bg-emerald-100 ring-2 ring-emerald-500"
-                        : "hover:bg-emerald-50"
+                        ? "bg-emerald-100 dark:bg-emerald-900 ring-2 ring-emerald-500"
+                        : "hover:bg-emerald-50 dark:hover:bg-zinc-800"
                     }`}
                   >
                     <PlantAvatar
@@ -228,7 +228,7 @@ export default function PotagerPlanner() {
                       category={plant.category}
                       size="sm"
                     />
-                    <span className="leading-tight text-emerald-800">
+                    <span className="leading-tight text-emerald-800 dark:text-emerald-100">
                       {plant.nom}
                     </span>
                   </button>
@@ -265,14 +265,14 @@ function PlotEditor({
   onDelete: () => void;
 }) {
   return (
-    <div className="rounded-xl border border-emerald-100 bg-white p-4">
+    <div className="rounded-xl border border-emerald-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <input
           value={plot.nom}
           onChange={(e) => onRename(e.target.value)}
-          className="rounded-lg border border-transparent px-1 text-lg font-bold text-emerald-900 outline-none hover:border-emerald-200 focus:border-emerald-400"
+          className="rounded-lg border border-transparent px-1 text-lg font-bold text-emerald-900 dark:text-emerald-50 outline-none hover:border-emerald-200 dark:hover:border-zinc-700 focus:border-emerald-400 dark:focus:border-emerald-500"
         />
-        <div className="flex items-center gap-3 text-sm text-emerald-800">
+        <div className="flex items-center gap-3 text-sm text-emerald-800 dark:text-emerald-100">
           <Stepper
             label="Lignes"
             value={plot.rows}
@@ -285,7 +285,7 @@ function PlotEditor({
           />
           <button
             onClick={onDelete}
-            className="rounded-full px-2 py-1 text-xs text-rose-600 hover:bg-rose-50"
+            className="rounded-full px-2 py-1 text-xs text-rose-600 dark:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-950"
           >
             Supprimer
           </button>
@@ -294,7 +294,7 @@ function PlotEditor({
 
       <div className="overflow-x-auto">
         <div
-          className="inline-grid gap-1 rounded-lg bg-amber-50/60 p-2"
+          className="inline-grid gap-1 rounded-lg bg-amber-50/60 dark:bg-amber-950/40 p-2"
           style={{ gridTemplateColumns: `repeat(${plot.cols}, 3.25rem)` }}
         >
           {plot.cells.map((cellId, index) => {
@@ -311,8 +311,8 @@ function PlotEditor({
                 }
                 className={`flex h-13 w-13 items-center justify-center rounded-md border text-2xl transition ${
                   inConflict
-                    ? "border-rose-400 bg-rose-50 ring-1 ring-rose-300"
-                    : "border-amber-200/70 bg-white hover:border-emerald-300 hover:bg-emerald-50"
+                    ? "border-rose-400 dark:border-rose-700 bg-rose-50 dark:bg-rose-950 ring-1 ring-rose-300 dark:ring-rose-700"
+                    : "border-amber-200/70 dark:border-zinc-700/70 bg-white dark:bg-zinc-900 hover:border-emerald-300 dark:hover:border-zinc-600 hover:bg-emerald-50 dark:hover:bg-zinc-800"
                 }`}
                 style={{ height: "3.25rem", width: "3.25rem" }}
               >
@@ -326,7 +326,7 @@ function PlotEditor({
                     )}
                   </span>
                 ) : (
-                  <span className="text-emerald-200">·</span>
+                  <span className="text-emerald-200 dark:text-zinc-600">·</span>
                 )}
               </button>
             );
@@ -334,10 +334,10 @@ function PlotEditor({
         </div>
       </div>
 
-      <div className="mt-3 flex flex-wrap items-center gap-4 text-xs text-emerald-700/80">
+      <div className="mt-3 flex flex-wrap items-center gap-4 text-xs text-emerald-700/80 dark:text-emerald-300/80">
         <span>
           Pinceau actuel :{" "}
-          <strong className="text-emerald-900">
+          <strong className="text-emerald-900 dark:text-emerald-50">
             {brush?.type === "eraser"
               ? "Gomme"
               : brush?.type === "plant"
@@ -346,7 +346,7 @@ function PlotEditor({
           </strong>
         </span>
         <span className="flex items-center gap-1">
-          <span className="inline-block h-3 w-3 rounded-sm border border-rose-400 bg-rose-50" />
+          <span className="inline-block h-3 w-3 rounded-sm border border-rose-400 dark:border-rose-700 bg-rose-50 dark:bg-rose-950" />
           voisinage déconseillé
         </span>
       </div>
@@ -365,17 +365,17 @@ function Stepper({
 }) {
   return (
     <span className="flex items-center gap-1">
-      <span className="text-xs text-emerald-700">{label}</span>
+      <span className="text-xs text-emerald-700 dark:text-emerald-300">{label}</span>
       <button
         onClick={() => onChange(value - 1)}
-        className="h-6 w-6 rounded-full bg-emerald-50 text-emerald-800 hover:bg-emerald-100"
+        className="h-6 w-6 rounded-full bg-emerald-50 dark:bg-zinc-800 text-emerald-800 dark:text-emerald-100 hover:bg-emerald-100 dark:hover:bg-zinc-700"
       >
         −
       </button>
       <span className="w-5 text-center font-medium">{value}</span>
       <button
         onClick={() => onChange(value + 1)}
-        className="h-6 w-6 rounded-full bg-emerald-50 text-emerald-800 hover:bg-emerald-100"
+        className="h-6 w-6 rounded-full bg-emerald-50 dark:bg-zinc-800 text-emerald-800 dark:text-emerald-100 hover:bg-emerald-100 dark:hover:bg-zinc-700"
       >
         +
       </button>

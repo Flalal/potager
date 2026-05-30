@@ -84,7 +84,7 @@ export default function PushToggle() {
 
   if (status === "unsupported") {
     return (
-      <p className="text-xs text-emerald-700/60">
+      <p className="text-xs text-emerald-700/60 dark:text-emerald-300/60">
         🔔 Notifications indisponibles sur cet appareil (ou non configurées sur le
         serveur).
       </p>
@@ -95,12 +95,12 @@ export default function PushToggle() {
     <div className="flex flex-wrap items-center gap-2">
       {status === "subscribed" ? (
         <>
-          <span className="text-sm text-emerald-800">
+          <span className="text-sm text-emerald-800 dark:text-emerald-100">
             🔔 Notifications activées sur cet appareil
           </span>
           <button
             onClick={disable}
-            className="rounded-full px-3 py-1 text-xs text-rose-600 hover:bg-rose-50"
+            className="rounded-full px-3 py-1 text-xs text-rose-600 dark:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-950"
           >
             Désactiver
           </button>
@@ -115,11 +115,11 @@ export default function PushToggle() {
         </button>
       )}
       {status === "denied" && (
-        <span className="text-xs text-rose-600">
+        <span className="text-xs text-rose-600 dark:text-rose-300">
           Autorisation refusée dans le navigateur.
         </span>
       )}
-      {error && <span className="text-xs text-rose-600">{error}</span>}
+      {error && <span className="text-xs text-rose-600 dark:text-rose-300">{error}</span>}
     </div>
   );
 }

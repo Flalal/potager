@@ -5,9 +5,9 @@ import { ACTION_COLORS } from "@/lib/calendar";
 import PlantAvatar from "./PlantAvatar";
 
 const DIFFICULTY_STYLE: Record<string, string> = {
-  facile: "bg-emerald-100 text-emerald-800",
-  moyen: "bg-amber-100 text-amber-800",
-  difficile: "bg-rose-100 text-rose-800",
+  facile: "bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-100",
+  moyen: "bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-200",
+  difficile: "bg-rose-100 dark:bg-rose-900 text-rose-800 dark:text-rose-200",
 };
 
 export default function PlantCard({
@@ -20,7 +20,7 @@ export default function PlantCard({
   return (
     <Link
       href={`/plantes/${plant.id}`}
-      className="group flex flex-col gap-2 rounded-xl border border-emerald-100 bg-white p-4 shadow-sm transition hover:border-emerald-300 hover:shadow-md"
+      className="group flex flex-col gap-2 rounded-xl border border-emerald-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 shadow-sm transition hover:border-emerald-300 dark:hover:border-zinc-600 hover:shadow-md"
     >
       <div className="flex items-start justify-between">
         <PlantAvatar emoji={plant.emoji} category={plant.category} size="md" />
@@ -32,11 +32,11 @@ export default function PlantCard({
           </span>
         )}
       </div>
-      <h3 className="font-semibold text-emerald-900 group-hover:text-emerald-700">
+      <h3 className="font-semibold text-emerald-900 dark:text-emerald-50 group-hover:text-emerald-700">
         {plant.nom}
       </h3>
       <div className="mt-auto flex flex-wrap gap-1.5 text-xs">
-        <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-emerald-700">
+        <span className="rounded-full bg-emerald-50 dark:bg-zinc-800 px-2 py-0.5 text-emerald-700 dark:text-emerald-300">
           {CATEGORY_LABELS[plant.category]}
         </span>
         <span
