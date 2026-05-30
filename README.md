@@ -9,18 +9,25 @@ rien au jardinage.
 - **Ce mois-ci** — ce qu'il faut semer / planter / récolter maintenant, avec
   filtres cliquables par action.
 - **Calendrier de l'année** — grille plantes × 12 mois (semis, plantation,
-  récolte), filtrable par catégorie et par action.
+  récolte), filtrable par catégorie et par action, **imprimable**.
 - **Fiches plantes** — 38 plantes (légumes, fruits, aromates) : exposition,
-  sol, arrosage, levée, espacement, ravageurs, rotation, compagnonnage.
-- **Mon jardin** — suivi personnel des plantations avec rappels de tâches du
-  mois (récolte, soins, arrosage) et **conseils d'arrosage selon la météo
-  locale** (Open-Meteo).
+  sol, arrosage, levée, espacement, ravageurs, rotation, compagnonnage,
+  **quantité conseillée** et **liens d'achat** (comparateur de prix).
+- **Mon jardin** — suivi des plantations avec **récolte prévisionnelle** (selon
+  la date de plantation), **tâches du mois cochables**, et **conseils
+  d'arrosage selon la météo locale** (Open-Meteo, par géoloc ou par ville).
 - **Journal de jardin** — récoltes, semis, observations et traitements datés,
   avec quantités.
-- **Plan du potager** — dessin des carrés et placement des plantes, avec
-  détection des voisinages déconseillés (compagnonnage).
+- **Plan du potager** — dessin des carrés et placement des plantes, avec :
+  détection des **voisinages déconseillés**, **rotation des cultures** (plan par
+  année + alerte « même famille ici récemment »), **modèles tout faits**,
+  **suggestions de bonnes voisines**, **distances de plantation**, impression.
+- **Liste de courses du mois** — graines/plants à acheter ce mois-ci, avec
+  quantités (par nombre de personnes) et liens pour comparer les prix.
 - **Zone climatique** — tout le calendrier se décale selon la région
   (Nord / France tempérée / Sud).
+- **Mode sombre** — bascule clair/sombre, suit le système par défaut.
+- **Onboarding** — carte de premiers pas pour les débutants.
 - **Accès protégé** — mot de passe unique du foyer (session par cookie),
   protégé contre les tentatives répétées (anti-brute-force).
 - **Notifications** — rappels des tâches du mois envoyés sur **Discord**,
@@ -122,9 +129,9 @@ nano .env.production        # HOUSEHOLD_PASSWORD, CRON_SECRET, notifs…
 npm run build
 ```
 
-> Le dépôt est **privé** : pour `git clone`, utiliser un Personal Access Token
+> Si le dépôt est **privé**, le `git clone` nécessite un Personal Access Token
 > (`https://<TOKEN>@github.com/Flalal/potager.git`) ou une clé de déploiement
-> SSH ajoutée au dépôt.
+> SSH. S'il est **public**, le clone HTTPS fonctionne directement.
 
 > La base SQLite est créée automatiquement au premier lancement sous
 > `./data/potager.db`. Pour la placer sur un volume persistant, définir

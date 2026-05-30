@@ -40,29 +40,55 @@ Le mois en cours est surligné.
 ## Fiches plantes
 
 Chaque fiche détaille exposition, sol, arrosage, levée, espacement, ravageurs,
-rotation (famille), compagnonnage (bonnes/mauvaises associations) et un
-mini-calendrier. Bouton **Ajouter à mon jardin** pour suivre la plante.
+rotation (famille), compagnonnage, un mini-calendrier, la **quantité conseillée**
+(ex. ≈ 8 pieds pour 4 pers.) et des **liens d'achat** (« Comparer les prix »
+pour trouver le moins cher). Bouton **Ajouter à mon jardin** pour suivre la
+plante.
 
 ## Plan du potager
 
 Dessinez vos **carrés** (lignes × colonnes), puis placez vos plantes :
 
-1. créez un carré (nom, dimensions) ;
+1. créez un carré, **ou partez d'un modèle tout fait** (Carré du débutant,
+   Tomates & basilic, Carré d'aromates, Carré d'automne) ;
 2. dans la **palette**, choisissez une plante (ou la **gomme**) ;
 3. cliquez les cases pour les remplir.
 
-L'outil **signale en rouge ⚠️** deux voisines déconseillées (compagnonnage).
-Vous pouvez renommer, redimensionner ou supprimer un carré.
+L'outil vous aide :
+
+- **⚠️ Voisinage déconseillé** : deux voisines incompatibles sont entourées
+  de rouge.
+- **🔁 Rotation** : changez l'**année** du carré ; si vous replantez la même
+  famille au même endroit dans les 3 ans, la case passe en orange.
+- **💡 Bonnes voisines à ajouter** : suggestions compatibles avec ce qui est
+  déjà placé (cliquez pour les prendre comme pinceau).
+- **📏 Distances de plantation** : la liste des espacements à respecter pour
+  chaque plante du carré (aussi dans l'infobulle de chaque case).
+
+Bouton **🖨️ Imprimer le plan** pour l'emporter au jardin. Vous pouvez renommer,
+redimensionner ou supprimer un carré.
 
 ## Mon jardin
 
-La liste de vos plantations, avec pour chacune les **tâches du mois** (récolte,
-soins, arrosage). On y trouve aussi :
+La liste de vos plantations. Pour chacune :
 
-- **Conseils d'arrosage météo** : cliquez « Activer la localisation » pour que
-  l'app récupère la météo locale (via Open-Meteo) et vous dise s'il faut
-  arroser ou non (pluie/chaleur prises en compte).
+- **Récolte prévue** : estimée à partir de votre date de plantation et de votre
+  région.
+- **Tâches du mois** (récolte, soins, arrosage) : **cochez-les** (✅) quand
+  c'est fait — l'état est enregistré et se réinitialise chaque mois.
+
+On y trouve aussi :
+
+- **Conseils d'arrosage météo** : saisissez votre **ville** (ou « 📍 Ma
+  position ») pour que l'app récupère la météo locale (Open-Meteo) et vous dise
+  s'il faut arroser ou non (pluie/chaleur prises en compte).
 - **Notifications** : bouton « 🔔 Activer les rappels » (voir plus bas).
+
+## Liste de courses du mois
+
+La page **Courses** réunit tout ce qu'il faut acheter ce mois-ci (graines à
+semer, plants à repiquer), avec la **quantité conseillée** selon le nombre de
+personnes (réglable) et un lien **« Comparer les prix »** par plante.
 
 ## Journal de jardin
 
