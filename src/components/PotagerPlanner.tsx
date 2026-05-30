@@ -403,7 +403,9 @@ function PlotEditor({
               ? "Voisinage déconseillé"
               : inRotation
                 ? "Rotation : même famille ici récemment"
-                : plant?.nom ?? "Case vide";
+                : plant
+                  ? `${plant.nom} — espacement ${plant.espacement}`
+                  : "Case vide";
             return (
               <button
                 key={index}
@@ -434,6 +436,38 @@ function PlotEditor({
           })}
         </div>
       </div>
+
+      {(() => {
+        const ids = Array.from(
+          new Set(plot.cells.filter((c): c is string => Boolean(c)))
+        );
+        if (ids.length === 0) return null;
+        return (
+          <div className="mt-4 border-t border-emerald-50 dark:border-zinc-800 pt-3">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-emerald-600 dark:text-emerald-400">
+              📏 Distances de plantation
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {ids.map((id) => {
+                const plant = getPlantById(id);
+                if (!plant) return null;
+                return (
+                  <span
+                    key={id}
+                    className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs text-emerald-800 dark:bg-zinc-800 dark:text-emerald-100"
+                  >
+                    <span>{plant.emoji}</span>
+                    <span className="font-medium">{plant.nom}</span>
+                    <span className="text-emerald-700/70 dark:text-emerald-300/70">
+                      {plant.espacement}
+                    </span>
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })()}
 
       <div className="mt-3 flex flex-wrap items-center gap-4 text-xs text-emerald-700/80 dark:text-emerald-300/80">
         <span>
