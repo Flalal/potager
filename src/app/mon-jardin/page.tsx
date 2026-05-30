@@ -1,5 +1,6 @@
 import MonJardin from "@/components/MonJardin";
 import PushToggle from "@/components/PushToggle";
+import WeatherAdvice from "@/components/WeatherAdvice";
 
 export const metadata = {
   title: "Mon jardin — Mon Potager",
@@ -15,6 +16,7 @@ export default function MonJardinPage() {
           données sont enregistrées sur le serveur du foyer.
         </p>
       </div>
+      <WeatherAdvice />
       <div className="rounded-xl border border-emerald-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4">
         <PushToggle />
       </div>

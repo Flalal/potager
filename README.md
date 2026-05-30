@@ -13,12 +13,16 @@ rien au jardinage.
 - **Fiches plantes** — 38 plantes (légumes, fruits, aromates) : exposition,
   sol, arrosage, levée, espacement, ravageurs, rotation, compagnonnage.
 - **Mon jardin** — suivi personnel des plantations avec rappels de tâches du
-  mois (récolte, soins, arrosage).
+  mois (récolte, soins, arrosage) et **conseils d'arrosage selon la météo
+  locale** (Open-Meteo).
+- **Journal de jardin** — récoltes, semis, observations et traitements datés,
+  avec quantités.
 - **Plan du potager** — dessin des carrés et placement des plantes, avec
   détection des voisinages déconseillés (compagnonnage).
 - **Zone climatique** — tout le calendrier se décale selon la région
   (Nord / France tempérée / Sud).
-- **Accès protégé** — mot de passe unique du foyer (session par cookie).
+- **Accès protégé** — mot de passe unique du foyer (session par cookie),
+  protégé contre les tentatives répétées (anti-brute-force).
 - **Notifications** — rappels des tâches du mois envoyés sur **Discord**,
   **Home Assistant** et/ou **Web Push** (PWA), déclenchés par un cron.
 - **PWA installable** — installable sur mobile/desktop, fonctionnement
@@ -49,6 +53,12 @@ Copier [`.env.example`](.env.example) en `.env` (dev) ou `.env.production`
 | `HA_WEBHOOK_URL` *ou* `HA_BASE_URL`+`HA_TOKEN`+`HA_NOTIFY_SERVICE` | Home Assistant (optionnel). |
 | `NEXT_PUBLIC_VAPID_PUBLIC_KEY` / `VAPID_PRIVATE_KEY` / `VAPID_SUBJECT` | Web Push (optionnel). Générer : `npx web-push generate-vapid-keys`. |
 
+## Documentation
+
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — conception technique (stack,
+  schéma DB, flux de données, auth, notifications, météo, PWA, tests).
+- [docs/GUIDE.md](docs/GUIDE.md) — guide d'utilisation par fonctionnalité.
+
 ## Développement local
 
 ```bash
@@ -59,9 +69,11 @@ npm run dev      # http://localhost:3000
 Autres scripts :
 
 ```bash
-npm run build    # build de production
-npm run start    # sert le build (après build)
+npm run build      # build de production
+npm run start      # sert le build (après build)
 npm run lint
+npm test           # tests unitaires (Vitest)
+npm run test:watch # tests en mode watch
 ```
 
 ---

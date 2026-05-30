@@ -12,6 +12,7 @@ const LINKS = [
   { href: "/plantes", label: "Plantes", emoji: "🌱" },
   { href: "/potager", label: "Plan", emoji: "🟫" },
   { href: "/mon-jardin", label: "Mon jardin", emoji: "🪴" },
+  { href: "/journal", label: "Journal", emoji: "📖" },
 ];
 
 export default function Nav() {

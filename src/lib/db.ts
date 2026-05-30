@@ -49,6 +49,25 @@ CREATE TABLE IF NOT EXISTS push_subscriptions (
   auth        TEXT NOT NULL,
   created_at  INTEGER NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS login_attempts (
+  ip            TEXT PRIMARY KEY,
+  fails         INTEGER NOT NULL DEFAULT 0,
+  first_fail_at INTEGER NOT NULL DEFAULT 0,
+  locked_until  INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS journal_entries (
+  id          TEXT PRIMARY KEY,
+  date        TEXT NOT NULL,
+  type        TEXT NOT NULL,
+  plant_id    TEXT NOT NULL DEFAULT '',
+  titre       TEXT NOT NULL DEFAULT '',
+  note        TEXT NOT NULL DEFAULT '',
+  quantite    REAL,
+  unite       TEXT NOT NULL DEFAULT '',
+  created_at  INTEGER NOT NULL
+);
 `;
 
 function createDb(): DatabaseSync {
