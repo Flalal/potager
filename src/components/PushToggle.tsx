@@ -15,19 +15,33 @@ function urlBase64ToUint8Array(base64: string): Uint8Array<ArrayBuffer> {
 
 type Status = "idle" | "subscribed" | "working" | "unsupported" | "denied";
 
+/** Raison précise d'indisponibilité, pour aider au diagnostic. */
+function unsupportedReason(): string | null {
+  if (typeof window === "undefined") return null;
+  if (!window.isSecureContext) {
+    return "Les notifications exigent une connexion sécurisée (HTTPS). Placez le site derrière un reverse proxy HTTPS.";
+  }
+  if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
+    return "Ce navigateur ne gère pas les notifications push.";
+  }
+  if (!VAPID_PUBLIC) {
+    return "Notifications non configurées sur le serveur (clé NEXT_PUBLIC_VAPID_PUBLIC_KEY absente au moment du build).";
+  }
+  return null;
+}
+
 export default function PushToggle() {
   const [status, setStatus] = useState<Status>("idle");
+  const [reason, setReason] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (
-      typeof window === "undefined" ||
-      !("serviceWorker" in navigator) ||
-      !("PushManager" in window) ||
-      !VAPID_PUBLIC
-    ) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+    const why = unsupportedReason();
+    if (why) {
+      /* eslint-disable react-hooks/set-state-in-effect */
+      setReason(why);
       setStatus("unsupported");
+      /* eslint-enable react-hooks/set-state-in-effect */
       return;
     }
     navigator.serviceWorker.ready
@@ -85,8 +99,7 @@ export default function PushToggle() {
   if (status === "unsupported") {
     return (
       <p className="text-xs text-emerald-700/60 dark:text-emerald-300/60">
-        🔔 Notifications indisponibles sur cet appareil (ou non configurées sur le
-        serveur).
+        🔔 {reason ?? "Notifications indisponibles sur cet appareil."}
       </p>
     );
   }
