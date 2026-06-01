@@ -49,9 +49,10 @@ export default function MonthDashboard() {
         </p>
         <h1 className="mt-1 text-3xl font-bold sm:text-4xl">{moisNom}</h1>
         <p className="mt-2 max-w-xl text-emerald-50">
-          Voici ce que vous pouvez faire au potager ce mois-ci, pour la zone «{" "}
-          {ZONE_LABELS[zone]} ». Cliquez sur une action pour filtrer, ou sur une
-          plante pour sa fiche détaillée.
+          Voici ce que vous pouvez faire au potager ce mois-ci, pour la zone{" "}
+          <span className="whitespace-nowrap">« {ZONE_LABELS[zone]} »</span>.
+          Cliquez sur une action pour filtrer, ou sur une plante pour sa fiche
+          détaillée.
         </p>
         <div className="mt-4 flex flex-wrap gap-3 text-sm">
           {SECTIONS.map((s) => {

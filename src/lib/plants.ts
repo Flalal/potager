@@ -1,4 +1,4 @@
-import { Plant } from "./types";
+import { Plant, monthToDecades } from "./types";
 
 /**
  * Données de plantation pour un climat France tempérée (océanique/continental).
@@ -6,6 +6,20 @@ import { Plant } from "./types";
  * Les dates sont des repères pour débutants ; à ajuster selon la météo locale
  * (voir le réglage de zone climatique).
  */
+
+const DEC_PART: Record<"d" | "m" | "f", number> = { d: 0, m: 1, f: 2 };
+
+/**
+ * Helper d'écriture des décades (tiers de mois, codage 1..36).
+ * `dec(3)` → mars entier ; `dec(3, "m", "f")` → mi + fin mars.
+ * Composer plusieurs mois par spread : `[...dec(3, "f"), ...dec(4)]`.
+ */
+function dec(month: number, ...parts: ("d" | "m" | "f")[]): number[] {
+  const decades = monthToDecades(month);
+  if (parts.length === 0) return decades;
+  return parts.map((p) => decades[DEC_PART[p]]);
+}
+
 export const PLANTS: Plant[] = [
   // ---------------- LÉGUMES ----------------
   {
@@ -18,6 +32,9 @@ export const PLANTS: Plant[] = [
     semis: [3, 4],
     plantation: [5, 6],
     recolte: [7, 8, 9, 10],
+    semisD: [...dec(3, "m", "f"), ...dec(4)],
+    plantationD: [...dec(5, "f"), ...dec(6)],
+    recolteD: [...dec(7, "m", "f"), ...dec(8), ...dec(9), ...dec(10, "d", "m")],
     arrosage: "Régulier au pied, sans mouiller les feuilles. 2 à 3 fois/semaine en été.",
     sol: "Riche, bien drainé, enrichi en compost.",
     espacement: "50 à 70 cm entre les plants.",
@@ -45,6 +62,15 @@ export const PLANTS: Plant[] = [
     semis: [3, 4, 5, 6, 7],
     plantation: [],
     recolte: [6, 7, 8, 9, 10, 11],
+    semisD: [...dec(3, "f"), ...dec(4), ...dec(5), ...dec(6), ...dec(7, "d", "m")],
+    recolteD: [
+      ...dec(6, "m", "f"),
+      ...dec(7),
+      ...dec(8),
+      ...dec(9),
+      ...dec(10),
+      ...dec(11, "d"),
+    ],
     arrosage: "Garder le sol frais surtout à la levée. Modéré ensuite.",
     sol: "Léger, sableux, sans cailloux ni fumier frais.",
     espacement: "Éclaircir à 5 cm sur le rang, 25 cm entre les rangs.",
@@ -71,6 +97,23 @@ export const PLANTS: Plant[] = [
     semis: [3, 4, 5, 6, 7, 8, 9],
     plantation: [],
     recolte: [5, 6, 7, 8, 9, 10],
+    semisD: [
+      ...dec(3, "m", "f"),
+      ...dec(4),
+      ...dec(5),
+      ...dec(6),
+      ...dec(7),
+      ...dec(8),
+      ...dec(9, "d", "m"),
+    ],
+    recolteD: [
+      ...dec(5),
+      ...dec(6),
+      ...dec(7),
+      ...dec(8),
+      ...dec(9),
+      ...dec(10, "d", "m"),
+    ],
     arrosage: "Fréquent et régulier, sinon les radis deviennent piquants et creux.",
     sol: "Meuble, frais, ordinaire.",
     espacement: "Éclaircir à 3-4 cm.",
@@ -96,6 +139,9 @@ export const PLANTS: Plant[] = [
     semis: [4, 5],
     plantation: [5, 6],
     recolte: [6, 7, 8, 9, 10],
+    semisD: [...dec(4, "m", "f"), ...dec(5)],
+    plantationD: [...dec(5, "f"), ...dec(6)],
+    recolteD: [...dec(6, "m", "f"), ...dec(7), ...dec(8), ...dec(9), ...dec(10, "d")],
     arrosage: "Abondant et régulier au pied. Très gourmande en eau.",
     sol: "Riche, profond, beaucoup de compost.",
     espacement: "1 m entre les plants (la plante s'étale).",
@@ -122,6 +168,35 @@ export const PLANTS: Plant[] = [
     semis: [2, 3, 4, 5, 6, 7, 8, 9],
     plantation: [3, 4, 5, 6, 7, 8, 9],
     recolte: [4, 5, 6, 7, 8, 9, 10, 11],
+    semisD: [
+      ...dec(2, "f"),
+      ...dec(3),
+      ...dec(4),
+      ...dec(5),
+      ...dec(6),
+      ...dec(7),
+      ...dec(8),
+      ...dec(9, "d", "m"),
+    ],
+    plantationD: [
+      ...dec(3, "m", "f"),
+      ...dec(4),
+      ...dec(5),
+      ...dec(6),
+      ...dec(7),
+      ...dec(8),
+      ...dec(9, "d", "m"),
+    ],
+    recolteD: [
+      ...dec(4, "m", "f"),
+      ...dec(5),
+      ...dec(6),
+      ...dec(7),
+      ...dec(8),
+      ...dec(9),
+      ...dec(10),
+      ...dec(11, "d", "m"),
+    ],
     arrosage: "Régulier, le sol ne doit jamais sécher complètement.",
     sol: "Frais, riche en humus.",
     espacement: "25 à 30 cm entre les plants.",
@@ -148,6 +223,8 @@ export const PLANTS: Plant[] = [
     semis: [5, 6, 7],
     plantation: [],
     recolte: [7, 8, 9, 10],
+    semisD: [...dec(5, "m", "f"), ...dec(6), ...dec(7, "d", "m")],
+    recolteD: [...dec(7, "f"), ...dec(8), ...dec(9), ...dec(10, "d")],
     arrosage: "Régulier, surtout à la floraison et formation des gousses.",
     sol: "Léger, réchauffé, sans excès d'azote.",
     espacement: "Poquets de 5-6 graines tous les 40 cm.",
@@ -200,6 +277,8 @@ export const PLANTS: Plant[] = [
     semis: [2, 3, 4],
     plantation: [5, 6, 7],
     recolte: [9, 10, 11, 12, 1, 2],
+    semisD: [...dec(2, "m", "f"), ...dec(3), ...dec(4)],
+    plantationD: [...dec(5), ...dec(6), ...dec(7, "d", "m")],
     arrosage: "Régulier les premières semaines après repiquage.",
     sol: "Riche, profond, frais.",
     espacement: "10-15 cm sur le rang, 30 cm entre rangs.",
@@ -226,6 +305,7 @@ export const PLANTS: Plant[] = [
     semis: [3, 4, 8, 9],
     plantation: [],
     recolte: [5, 6, 10, 11, 4],
+    semisD: [...dec(3, "m", "f"), ...dec(4), ...dec(8, "m", "f"), ...dec(9)],
     arrosage: "Régulier, le sol doit rester frais.",
     sol: "Riche, frais, profond.",
     espacement: "Éclaircir à 10 cm.",
@@ -251,6 +331,8 @@ export const PLANTS: Plant[] = [
     semis: [2, 3, 4, 10, 11],
     plantation: [],
     recolte: [5, 6, 7],
+    semisD: [...dec(2, "f"), ...dec(3), ...dec(4), ...dec(10), ...dec(11, "d", "m")],
+    recolteD: [...dec(5, "m", "f"), ...dec(6), ...dec(7, "d", "m")],
     arrosage: "Modéré, plus à la floraison.",
     sol: "Léger, frais, peu fumé.",
     espacement: "Rangs espacés de 40-50 cm.",
@@ -277,6 +359,8 @@ export const PLANTS: Plant[] = [
     semis: [4, 5, 6],
     plantation: [],
     recolte: [7, 8, 9, 10],
+    semisD: [...dec(4, "m", "f"), ...dec(5), ...dec(6)],
+    recolteD: [...dec(7), ...dec(8), ...dec(9), ...dec(10, "d", "m")],
     arrosage: "Régulier pour éviter que la racine ne durcisse.",
     sol: "Profond, meuble, sans cailloux.",
     espacement: "Éclaircir à 10-15 cm.",
@@ -302,6 +386,8 @@ export const PLANTS: Plant[] = [
     semis: [2, 3],
     plantation: [3, 4, 9, 10],
     recolte: [7, 8, 9],
+    plantationD: [...dec(3, "m", "f"), ...dec(4), ...dec(9, "m", "f"), ...dec(10)],
+    recolteD: [...dec(7, "m", "f"), ...dec(8), ...dec(9, "d")],
     arrosage: "Faible. Arrêter l'arrosage en fin de cycle.",
     sol: "Léger, drainé, sans fumure fraîche.",
     espacement: "10-12 cm sur le rang.",
@@ -354,6 +440,9 @@ export const PLANTS: Plant[] = [
     semis: [4, 5],
     plantation: [5, 6],
     recolte: [7, 8, 9],
+    semisD: [...dec(4, "m", "f"), ...dec(5)],
+    plantationD: [...dec(5, "f"), ...dec(6)],
+    recolteD: [...dec(7), ...dec(8), ...dec(9, "d", "m")],
     arrosage: "Très régulier et abondant. Ne jamais laisser sécher.",
     sol: "Riche, frais, drainé.",
     espacement: "60-80 cm entre plants.",
@@ -508,6 +597,7 @@ export const PLANTS: Plant[] = [
     semis: [3, 4, 8, 9],
     plantation: [],
     recolte: [5, 6, 10, 11],
+    semisD: [...dec(3, "m", "f"), ...dec(4), ...dec(8), ...dec(9)],
     arrosage: "Régulier pour des racines tendres.",
     sol: "Frais, meuble, riche en humus.",
     espacement: "Éclaircir à 10 cm.",
@@ -608,6 +698,7 @@ export const PLANTS: Plant[] = [
     semis: [8, 9, 10],
     plantation: [],
     recolte: [10, 11, 12, 1, 2, 3],
+    semisD: [...dec(8, "m", "f"), ...dec(9), ...dec(10)],
     arrosage: "Régulier à la levée, faible ensuite.",
     sol: "Ordinaire, ferme, frais.",
     espacement: "Éclaircir à 10 cm.",
@@ -633,6 +724,7 @@ export const PLANTS: Plant[] = [
     semis: [3, 4, 5, 8, 9],
     plantation: [],
     recolte: [4, 5, 6, 9, 10, 11],
+    semisD: [...dec(3, "m", "f"), ...dec(4), ...dec(5), ...dec(8), ...dec(9)],
     arrosage: "Régulier ; la sécheresse la rend très piquante.",
     sol: "Frais, ordinaire.",
     espacement: "Éclaircir à 10 cm.",
@@ -686,6 +778,9 @@ export const PLANTS: Plant[] = [
     semis: [3, 4, 5],
     plantation: [5, 6],
     recolte: [6, 7, 8, 9, 10],
+    semisD: [...dec(3, "f"), ...dec(4), ...dec(5)],
+    plantationD: [...dec(5, "f"), ...dec(6)],
+    recolteD: [...dec(6, "m", "f"), ...dec(7), ...dec(8), ...dec(9), ...dec(10, "d")],
     arrosage: "Régulier, le matin. Craint la sécheresse comme l'excès d'eau.",
     sol: "Riche, frais, drainé.",
     espacement: "20-25 cm entre plants.",
@@ -711,6 +806,14 @@ export const PLANTS: Plant[] = [
     semis: [3, 4, 5, 6, 7, 8],
     plantation: [],
     recolte: [5, 6, 7, 8, 9, 10, 11],
+    semisD: [
+      ...dec(3, "m", "f"),
+      ...dec(4),
+      ...dec(5),
+      ...dec(6),
+      ...dec(7),
+      ...dec(8, "d", "m"),
+    ],
     arrosage: "Régulier, le sol doit rester frais.",
     sol: "Riche, frais, profond.",
     espacement: "Éclaircir à 15-20 cm.",
@@ -890,6 +993,8 @@ export const PLANTS: Plant[] = [
     semis: [],
     plantation: [3, 4, 8, 9],
     recolte: [5, 6, 7, 8, 9],
+    plantationD: [...dec(3, "m", "f"), ...dec(4), ...dec(8, "m", "f"), ...dec(9)],
+    recolteD: [...dec(5, "f"), ...dec(6), ...dec(7), ...dec(8), ...dec(9, "d")],
     arrosage: "Régulier au pied, sans mouiller les fruits.",
     sol: "Riche, frais, drainé, légèrement acide.",
     espacement: "30-40 cm entre plants.",

@@ -1,8 +1,80 @@
 import { PLANTS } from "./plants";
-import { ActionType, Plant } from "./types";
+import { ActionType, Plant, monthToDecades } from "./types";
+
+// Primitives pures de décade : définies dans types.ts (sans import → pas de
+// cycle, réutilisables par plants.ts). Ré-exportées ici par commodité.
+export { monthToDecades, decadeMonth, decadePart } from "./types";
 
 export function getCurrentMonth(): number {
   return new Date().getMonth() + 1; // 1-12
+}
+
+/**
+ * Décade courante (1..36) d'après la date du jour.
+ * Jours 1-10 → début, 11-20 → mi, 21+ → fin.
+ */
+export function getCurrentDecade(): number {
+  const now = new Date();
+  const month = now.getMonth() + 1;
+  const day = now.getDate();
+  const part = day <= 10 ? 0 : day <= 20 ? 1 : 2;
+  return (month - 1) * 3 + part + 1;
+}
+
+/**
+ * Décale une liste de décades selon la zone climatique.
+ * `offset` est exprimé en mois (comme `shiftMonths`) et converti en décades.
+ */
+export function shiftDecades(decades: number[], offset: number): number[] {
+  if (!offset) return decades;
+  const shift = offset * 3;
+  const shifted = decades.map((d) => (((d - 1 + shift) % 36) + 36) % 36 + 1);
+  return Array.from(new Set(shifted)).sort((a, b) => a - b);
+}
+
+/**
+ * Décades d'une plante pour une action : utilise la précision décadaire si
+ * elle est fournie, sinon développe les mois pleins en décades.
+ */
+export function decadesForAction(plant: Plant, action: ActionType): number[] {
+  const fine =
+    action === "semis"
+      ? plant.semisD
+      : action === "plantation"
+        ? plant.plantationD
+        : plant.recolteD;
+  if (fine && fine.length) return [...fine].sort((a, b) => a - b);
+  const base =
+    action === "semis"
+      ? plant.semis
+      : action === "plantation"
+        ? plant.plantation
+        : plant.recolte;
+  return base.flatMap(monthToDecades);
+}
+
+/** Décades d'une plante pour une action, ajustées à la zone climatique. */
+export function adjustedDecades(
+  plant: Plant,
+  action: ActionType,
+  offset: number
+): number[] {
+  return shiftDecades(decadesForAction(plant, action), offset);
+}
+
+/**
+ * Décades actives par action pour une plante, en Sets (lookup O(1)), ajustées
+ * à la zone. Mutualisé entre la grille annuelle et la fiche plante.
+ */
+export function adjustedDecadeSets(
+  plant: Plant,
+  offset: number
+): Record<ActionType, Set<number>> {
+  return {
+    semis: new Set(adjustedDecades(plant, "semis", offset)),
+    plantation: new Set(adjustedDecades(plant, "plantation", offset)),
+    recolte: new Set(adjustedDecades(plant, "recolte", offset)),
+  };
 }
 
 /**

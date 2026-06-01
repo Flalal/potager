@@ -30,12 +30,17 @@ La page d'accueil montre, pour le mois courant et votre région, ce qu'il faut :
 ## Calendrier de l'année
 
 Une grille **plantes × 12 mois** avec un repère couleur par action
-(semis / plantation / récolte). Vous pouvez :
+(semis / plantation / récolte). Chaque mois est découpé en **3 sous-périodes**
+(« décades ») — **début** (1–10), **mi** (11–20) et **fin** (21–fin du mois) —
+pour des dates plus précises qu'un simple mois. La position de la marque dans
+la case indique la période exacte. Vous pouvez :
 
 - filtrer par **catégorie** (légume / fruit / aromate) ;
 - cliquer sur **Semis / Plantation / Récolte** pour n'afficher que ces actions.
 
-Le mois en cours est surligné.
+Le mois en cours est surligné, et la décade en cours est entourée d'un liseré
+vert. Les cultures les plus courantes ont des dates affinées au tiers de mois ;
+les autres restent indiquées au mois plein.
 
 ## Fiches plantes
 

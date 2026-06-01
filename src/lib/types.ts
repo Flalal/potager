@@ -6,6 +6,40 @@ export type BesoinEau = "faible" | "moyen" | "eleve";
 /** Mois codés de 1 (janvier) à 12 (décembre). */
 export type Month = number;
 
+/**
+ * Décade : tiers de mois, codée de 1 à 36. Pour un mois `m` :
+ * `3m-2` = début (1-10), `3m-1` = mi (11-20), `3m` = fin (21-fin du mois).
+ */
+export type Decade = number;
+
+export type DecadePart = "debut" | "milieu" | "fin";
+
+/** Libellés courts des tiers de mois (pour les info-bulles et la légende). */
+export const DECADE_PART_LABELS: Record<DecadePart, string> = {
+  debut: "début",
+  milieu: "mi",
+  fin: "fin",
+};
+
+/** Ordre canonique des tiers de mois (début → mi → fin). */
+export const DECADE_PARTS: DecadePart[] = ["debut", "milieu", "fin"];
+
+/** Les 3 décades d'un mois (début, mi, fin), en codage 1..36. */
+export function monthToDecades(month: number): number[] {
+  const base = (month - 1) * 3;
+  return [base + 1, base + 2, base + 3];
+}
+
+/** Mois (1..12) auquel appartient une décade (1..36). */
+export function decadeMonth(decade: number): number {
+  return Math.floor((decade - 1) / 3) + 1;
+}
+
+/** Tiers du mois d'une décade : 0 = début, 1 = mi, 2 = fin. */
+export function decadePart(decade: number): number {
+  return (decade - 1) % 3;
+}
+
 /** Tâche d'entretien récurrente, déclenchée certains mois de l'année. */
 export interface CareTask {
   mois: Month[];
@@ -25,6 +59,16 @@ export interface Plant {
   plantation: Month[];
   /** Mois de récolte. */
   recolte: Month[];
+  /**
+   * Précision décadaire optionnelle (tiers de mois, 1..36). Si fournie, elle
+   * affine l'affichage du calendrier ; sinon le mois plein est utilisé.
+   * Les mois couverts doivent correspondre exactement au tableau `semis`.
+   */
+  semisD?: Decade[];
+  /** Précision décadaire optionnelle de la plantation (voir `semisD`). */
+  plantationD?: Decade[];
+  /** Précision décadaire optionnelle de la récolte (voir `semisD`). */
+  recolteD?: Decade[];
   arrosage: string;
   sol: string;
   espacement: string;
@@ -52,6 +96,9 @@ export const BESOIN_EAU_LABELS: Record<BesoinEau, string> = {
 };
 
 export type ActionType = "semis" | "plantation" | "recolte";
+
+/** Ordre canonique des actions (semis → plantation → récolte). */
+export const ACTION_ORDER: ActionType[] = ["semis", "plantation", "recolte"];
 
 export const CATEGORY_LABELS: Record<Category, string> = {
   legume: "Légume",

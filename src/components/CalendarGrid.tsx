@@ -3,8 +3,23 @@
 import { useState } from "react";
 import Link from "next/link";
 import { PLANTS } from "@/lib/plants";
-import { MONTHS_SHORT, Category, CATEGORY_LABELS, ActionType } from "@/lib/types";
-import { getCurrentMonth, ACTION_COLORS, shiftMonths } from "@/lib/calendar";
+import {
+  MONTHS_SHORT,
+  MONTHS_FR,
+  Category,
+  CATEGORY_LABELS,
+  ActionType,
+  ACTION_ORDER as ORDER,
+  DECADE_PART_LABELS,
+  DECADE_PARTS as PARTS,
+} from "@/lib/types";
+import {
+  getCurrentMonth,
+  getCurrentDecade,
+  monthToDecades,
+  ACTION_COLORS,
+  adjustedDecadeSets,
+} from "@/lib/calendar";
 import { useClimate } from "@/lib/climate";
 
 const CATEGORIES: (Category | "tous")[] = ["tous", "legume", "fruit", "aromate"];
@@ -14,21 +29,6 @@ const CAT_LABEL: Record<string, string> = {
   ...CATEGORY_LABELS,
 };
 
-const ORDER: ActionType[] = ["semis", "plantation", "recolte"];
-
-function cellActions(
-  semis: number[],
-  plantation: number[],
-  recolte: number[],
-  month: number
-): ActionType[] {
-  const a: ActionType[] = [];
-  if (semis.includes(month)) a.push("semis");
-  if (plantation.includes(month)) a.push("plantation");
-  if (recolte.includes(month)) a.push("recolte");
-  return a;
-}
-
 export default function CalendarGrid() {
   const [filter, setFilter] = useState<Category | "tous">("tous");
   const [activeActions, setActiveActions] = useState<Set<ActionType>>(
@@ -36,6 +36,7 @@ export default function CalendarGrid() {
   );
   const { offset } = useClimate();
   const currentMonth = getCurrentMonth();
+  const currentDecade = getCurrentDecade();
 
   const toggleAction = (a: ActionType) =>
     setActiveActions((prev) => {
@@ -125,7 +126,9 @@ export default function CalendarGrid() {
             </tr>
           </thead>
           <tbody>
-            {plants.map((plant) => (
+            {plants.map((plant) => {
+              const sets = adjustedDecadeSets(plant, offset);
+              return (
               <tr key={plant.id} className="border-t border-emerald-50 dark:border-zinc-800">
                 <td className="sticky left-0 z-10 bg-white dark:bg-zinc-900 px-3 py-1.5">
                   <Link
@@ -136,37 +139,57 @@ export default function CalendarGrid() {
                     {plant.nom}
                   </Link>
                 </td>
-                {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => {
-                  const actions = cellActions(
-                    shiftMonths(plant.semis, offset),
-                    shiftMonths(plant.plantation, offset),
-                    shiftMonths(plant.recolte, offset),
-                    month
-                  ).filter(isActive);
-                  return (
-                    <td
-                      key={month}
-                      className={`px-1 py-1.5 ${
-                        month === currentMonth ? "bg-emerald-50/60 dark:bg-zinc-800/60" : ""
-                      }`}
-                    >
-                      <div className="flex justify-center gap-0.5">
-                        {actions.map((a) => (
-                          <span
-                            key={a}
-                            title={ACTION_COLORS[a].label}
-                            className={`h-3.5 w-3.5 rounded-sm ${ACTION_COLORS[a].dot}`}
-                          />
-                        ))}
-                      </div>
-                    </td>
-                  );
-                })}
+                {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
+                  <td
+                    key={month}
+                    className={`px-1 py-1.5 ${
+                      month === currentMonth
+                        ? "bg-emerald-50/60 dark:bg-zinc-800/60"
+                        : ""
+                    }`}
+                  >
+                    <div className="flex justify-center gap-px">
+                      {PARTS.map((part, pi) => {
+                        const decade = monthToDecades(month)[pi];
+                        const acts = ORDER.filter(
+                          (a) => isActive(a) && sets[a].has(decade)
+                        );
+                        return (
+                          <div
+                            key={part}
+                            title={`${MONTHS_FR[month - 1]} — ${DECADE_PART_LABELS[part]}`}
+                            className={`flex w-3 flex-col gap-px rounded-[3px] py-0.5 ${
+                              decade === currentDecade
+                                ? "ring-1 ring-emerald-400 dark:ring-emerald-500"
+                                : ""
+                            }`}
+                          >
+                            {acts.map((a) => (
+                              <span
+                                key={a}
+                                title={ACTION_COLORS[a].label}
+                                className={`h-1.5 w-full rounded-[2px] ${ACTION_COLORS[a].dot}`}
+                              />
+                            ))}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </td>
+                ))}
               </tr>
-            ))}
+              );
+            })}
           </tbody>
         </table>
       </div>
+
+      <p className="text-xs text-emerald-700/70 dark:text-emerald-300/70">
+        Chaque mois est divisé en 3 : <strong>début</strong> (1–10),{" "}
+        <strong>mi</strong> (11–20) et <strong>fin</strong> (21–fin du mois). La
+        position de la marque dans la case indique la période précise ; le
+        liseré vert repère la décade en cours.
+      </p>
     </div>
   );
 }
