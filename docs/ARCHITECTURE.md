@@ -48,7 +48,7 @@ src/
   lib/
     plants.ts             Catalogue statique (38 plantes)
     types.ts              Types + libellés
-    calendar.ts           Logique calendaire (décalage zone, tâches, compat.)
+    calendar.ts           Logique calendaire (décalage zone, décades, tâches, compat.)
     garden-calc.ts        Récolte prévisionnelle (logique pure)
     quantities.ts         Quantités conseillées par personne (logique pure)
     shopping.ts           Liens d'achat / comparateur (logique pure)
@@ -71,10 +71,26 @@ public/
 Deux natures de données :
 
 1. **Catalogue de plantes** — statique, dans `src/lib/plants.ts` (versionné,
-   livré dans le bundle). 38 plantes avec semis/plantation/récolte par mois,
-   compagnonnage, ravageurs, besoins, soins…
+   livré dans le bundle). Plantes avec semis/plantation/récolte par mois,
+   compagnonnage, ravageurs, besoins, soins… Les fenêtres de semis/plantation/
+   récolte peuvent être **affinées à la décade** (tiers de mois) via les champs
+   optionnels `semisD`/`plantationD`/`recolteD` (codage 1..36 ; voir ci-dessous).
+   À défaut, le mois plein est utilisé — c'est rétrocompatible.
 2. **Données du foyer** — dynamiques, en base SQLite : plantations, parcelles
    (plan), entrées de journal, abonnements push, sessions, tentatives de login.
+
+### Granularité décade (sous le mois)
+
+Le calendrier descend sous le mois grâce aux **décades** (tiers de mois) :
+code `1..36` où, pour un mois `m`, `3m-2` = début (1–10), `3m-1` = mi (11–20),
+`3m` = fin (21–fin du mois). `calendar.ts` expose `monthToDecades`,
+`decadeMonth`, `decadePart`, `shiftDecades` (décalage zone, en mois → ×3),
+`decadesForAction` (précision fine si fournie, sinon expansion du mois plein),
+`adjustedDecades` et `getCurrentDecade` (d'après le jour courant). La précision
+est **additive et optionnelle** : `*D` n'écrase pas les tableaux mensuels, qui
+restent la source pour les autres features (journal, tâches, plan…). Un test
+d'invariant garantit que les mois couverts par un champ `*D` correspondent
+exactement au tableau mensuel associé. Helper d'écriture `dec()` dans `plants.ts`.
 
 ### Schéma SQLite
 
@@ -172,9 +188,11 @@ applique le thème avant le premier paint (anti-FOUC) et `<html>` porte
 
 ## Tests
 
-**Vitest** (environnement `node`). Couvre la logique pure (48 tests) :
+**Vitest** (environnement `node`). Couvre la logique pure (56 tests) :
 
-- `calendar.test.ts` — décalage de zone, tâches du mois, compatibilités.
+- `calendar.test.ts` — décalage de zone, **décades** (conversion, décalage,
+  invariant de cohérence mois↔décade sur tout le catalogue), tâches du mois,
+  compatibilités.
 - `login-throttle.test.ts` — verrou/fenêtre/réinitialisation.
 - `weather.test.ts` — arrosage, agrégation et géocodage Open-Meteo.
 - `garden-calc.test.ts` — récolte prévisionnelle.
